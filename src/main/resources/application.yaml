@@ -1,0 +1,24 @@
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    com:
+      example:
+        demo: INFO
+server:
+  port: 8010
+  servlet:
+    context-path: /notivent
+    session:
+      timeout: 15m
+spring:
+  datasource:
+    jdbcurl: jdbc:postgresql://localhost:5432/notivent?currentSchema=mvp
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 05konrad05
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+mybatis:
+  configuration:
+    call-setters-on-nulls: false

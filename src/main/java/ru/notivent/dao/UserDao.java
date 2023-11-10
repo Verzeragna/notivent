@@ -1,0 +1,15 @@
+package ru.notivent.dao;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import ru.notivent.model.User;
+
+import java.util.Optional;
+
+@Repository
+public interface UserDao {
+
+    User create(@Param("entity") User entity);
+
+    Optional<User> findByUserName(@Param("userName") String userName);
+}
