@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.notivent.dao.GeoPointDao">
+
+    <select id="create" parameterType="map" resultType="ru.notivent.model.GeoPoint">
+        INSERT INTO mvp.geo_point(user_uuid,latitude,longitude,name,description,type,created_at,live)
+        VALUES(#{entity.userUuid}::uuid,#{entity.latitude},#{entity.longitude},#{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live})
+        RETURNING *
+    </select>
+</mapper>

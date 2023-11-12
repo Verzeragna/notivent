@@ -3,7 +3,7 @@ logging:
   level:
     com:
       example:
-        demo: INFO
+        demo: DEBUG
 server:
   port: 8010
   servlet:
