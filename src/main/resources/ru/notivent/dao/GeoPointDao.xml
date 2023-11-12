@@ -6,7 +6,7 @@
 
     <select id="create" parameterType="map" resultType="ru.notivent.model.GeoPoint">
         INSERT INTO mvp.geo_point(user_uuid,latitude,longitude,name,description,type,created_at,live)
-        VALUES(#{entity.userId}::uuid,#{entity.latitude},#{entity.longitude},#{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live})
+        VALUES(#{entity.userUuid}::uuid,#{entity.latitude},#{entity.longitude},#{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live})
         RETURNING *
     </select>
 </mapper>

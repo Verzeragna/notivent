@@ -9,7 +9,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="2" author="Sergei Andreev">
-        <sql>DROP TYPE mvp.geo_point_type</sql>
+        <sql>DROP TYPE IF EXISTS mvp.geo_point_type</sql>
         <sql>CREATE TYPE mvp.geo_point_type AS ENUM ('PRIVATE', 'PUBLIC')</sql>
         <createTable tableName="geo_point" schemaName="mvp">
             <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">

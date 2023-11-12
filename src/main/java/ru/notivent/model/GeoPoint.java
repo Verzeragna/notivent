@@ -6,13 +6,14 @@ import lombok.NoArgsConstructor;
 import ru.notivent.enums.GeoPointType;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeoPoint {
-    long id;
-    String userId;
+    UUID uuid;
+    UUID userUuid;
     GeoPointType type;
     double latitude;
     double longitude;

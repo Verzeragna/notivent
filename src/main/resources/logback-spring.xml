@@ -31,20 +31,14 @@
         </layout>
     </appender>
 
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern> %d{dd-MM-yyyy HH:mm:ss.SSS} [%thread] %-5level %logger{36}.%M - %msg%n </pattern>
-        </layout>
-    </appender>
-
-    <logger name="org.springframework.security" level="trace" additivity="false">
-        <appender-ref ref="Console" />
+    <logger name="org.springframework.web.filter.CommonsRequestLoggingFilter">
+        <level value="DEBUG" />
     </logger>
 
     <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${logsFolder}/graphteam.log</file>
+        <file>${logsFolder}/notivent.log</file>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>${logsFolder}/archive/graphteam_%d{dd-MM-yyyy}.log.gz</fileNamePattern>
+            <fileNamePattern>${logsFolder}/archive/notivent_%d{dd-MM-yyyy}.log.gz</fileNamePattern>
             <maxHistory>${storagePeriod}</maxHistory>
         </rollingPolicy>
         <encoder>
