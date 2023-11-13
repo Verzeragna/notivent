@@ -9,4 +9,10 @@
         VALUES(#{entity.userUuid}::uuid,#{entity.latitude},#{entity.longitude},#{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live})
         RETURNING *
     </select>
+
+    <select id="findById" resultType="ru.notivent.model.GeoPoint">
+        SELECT *
+        FROM mvp.geo_point
+        WHERE uuid = #{uuid}
+    </select>
 </mapper>
