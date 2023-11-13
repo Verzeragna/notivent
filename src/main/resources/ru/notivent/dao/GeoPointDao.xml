@@ -5,8 +5,8 @@
 <mapper namespace="ru.notivent.dao.GeoPointDao">
 
     <select id="create" parameterType="map" resultType="ru.notivent.model.GeoPoint">
-        INSERT INTO mvp.geo_point(user_uuid,latitude,longitude,name,description,type,created_at,live)
-        VALUES(#{entity.userUuid}::uuid,#{entity.latitude},#{entity.longitude},#{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live})
+        INSERT INTO mvp.geo_point(user_uuid,latitude,longitude,gis_point,name,description,type,created_at,live)
+        VALUES(#{entity.userUuid}::uuid,#{entity.latitude},#{entity.longitude},#{entity.gisPoint},#{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live})
         RETURNING *
     </select>
 
@@ -14,5 +14,21 @@
         SELECT *
         FROM mvp.geo_point
         WHERE uuid = #{uuid}
+    </select>
+
+    <select id="findPrivateByUser" resultType="ru.notivent.model.GeoPoint">
+        SELECT *
+        FROM mvp.geo_point
+        WHERE user_uuid = #{userUuid}
+        AND type = 'PRIVATE'::mvp.geo_point_type
+    </select>
+
+    <select id="findAllByUserAndRadius" resultType="ru.notivent.model.GeoPoint">
+        SELECT *
+        FROM mvp.geo_point
+        WHERE ST_DWithin(geography(gis_point), geography(#{userGisPoint}), #{radius})
+        AND type = 'PUBLIC'::mvp.geo_point_type
+        ORDER BY created_at
+        LIMIT #{limit}
     </select>
 </mapper>

@@ -3,6 +3,7 @@ package ru.notivent.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.locationtech.jts.geom.Point;
 import ru.notivent.enums.GeoPointType;
 
 import java.time.Instant;
@@ -17,6 +18,7 @@ public class GeoPoint {
     GeoPointType type;
     double latitude;
     double longitude;
+    Point gisPoint;
     String name;
     String description;
     Instant createdAt;
