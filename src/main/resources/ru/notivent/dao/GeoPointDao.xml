@@ -16,11 +16,10 @@
         WHERE uuid = #{uuid}
     </select>
 
-    <select id="findPrivateByUser" resultType="ru.notivent.model.GeoPoint">
+    <select id="findByUser" resultType="ru.notivent.model.GeoPoint">
         SELECT *
         FROM mvp.geo_point
         WHERE user_uuid = #{userUuid}
-        AND type = 'PRIVATE'::mvp.geo_point_type
     </select>
 
     <select id="findAllByUserAndRadius" resultType="ru.notivent.model.GeoPoint">

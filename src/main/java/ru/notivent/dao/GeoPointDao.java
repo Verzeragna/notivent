@@ -16,7 +16,7 @@ public interface GeoPointDao {
 
     Optional<GeoPoint> findById(@Param("uuid") UUID uuid);
 
-    List<GeoPoint> findPrivateByUser(@Param("userUuid") UUID userUuid);
+    List<GeoPoint> findByUser(@Param("userUuid") UUID userUuid);
 
     List<GeoPoint> findAllByUserAndRadius(@Param("userGisPoint") Point userGisPoint,
                                           @Param("radius") double radius,

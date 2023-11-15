@@ -10,7 +10,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserGeoPointDto {
-    UUID userUuid;
     double latitude;
     double longitude;
 }
