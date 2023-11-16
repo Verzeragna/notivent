@@ -18,7 +18,6 @@ public class GeoPoint {
     GeoPointType type;
     double latitude;
     double longitude;
-    Point gisPoint;
     String name;
     String description;
     Instant createdAt;

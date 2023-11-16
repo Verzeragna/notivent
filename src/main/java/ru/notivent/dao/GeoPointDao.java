@@ -12,13 +12,15 @@ import java.util.UUID;
 @Repository
 public interface GeoPointDao {
 
-    GeoPoint create(@Param("entity") GeoPoint geoPoint);
+  GeoPoint create(@Param("entity") GeoPoint geoPoint);
 
-    Optional<GeoPoint> findById(@Param("uuid") UUID uuid);
+  Optional<GeoPoint> findById(@Param("uuid") UUID uuid);
 
-    List<GeoPoint> findByUser(@Param("userUuid") UUID userUuid);
+  List<GeoPoint> findByUser(@Param("userUuid") UUID userUuid);
 
-    List<GeoPoint> findAllByUserAndRadius(@Param("userGisPoint") Point userGisPoint,
-                                          @Param("radius") double radius,
-                                          @Param("limit") int limit);
+  List<GeoPoint> findAllByUserAndRadius(
+      @Param("longitude") double longitude,
+      @Param("latitude") double latitude,
+      @Param("radius") double radius,
+      @Param("limit") int limit);
 }

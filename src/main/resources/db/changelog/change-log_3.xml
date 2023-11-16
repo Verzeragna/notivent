@@ -10,7 +10,7 @@ http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="3" author="Sergei Andreev">
         <sql>CREATE EXTENSION IF NOT EXISTS "postgis" SCHEMA mvp</sql>
-        <addColumn tableName="gis_point" schemaName="mvp">
+        <addColumn tableName="geo_point" schemaName="mvp">
             <column name="point" type="geometry(Point, 4326)">
                 <constraints nullable="false"/>
             </column>

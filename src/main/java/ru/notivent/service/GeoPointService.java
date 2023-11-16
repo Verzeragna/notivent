@@ -30,19 +30,15 @@ public class GeoPointService {
   // TODO: This setting will be made by the user in the future
   // We use geography function. In this case here we use distance in meters
   private static final double RADIUS = 10000.0;
-  private static final int SRID = 4326;
-  private static final GeometryFactory geometryFactory =
-      new GeometryFactory(new PrecisionModel(), SRID);
 
   @Delegate private final GeoPointDao geoPointDao;
 
   public GeoPoint createGeoPoint(GeoPoint geoPoint, UUID userUuid) {
     val geoPointLive = geoPoint.getCreatedAt().plus(1, ChronoUnit.DAYS);
-    val coordinate = new Coordinate(geoPoint.getLongitude(), geoPoint.getLatitude());
-    geoPoint.setGisPoint(geometryFactory.createPoint(coordinate));
     geoPoint.setLive(geoPointLive);
     geoPoint.setUserUuid(userUuid);
-    return create(geoPoint);
+    val createdPoint = create(geoPoint);
+    return createdPoint;
   }
 
   public GeoPoint findGeoPointById(UUID uuid) {
@@ -53,10 +49,8 @@ public class GeoPointService {
 
   public GeoPointsDto getAllGeoPointsForUser(UserGeoPointDto dto, UUID userUuid) {
     var privatePoints = findByUser(userUuid);
-    val coordinate = new Coordinate(dto.getLongitude(), dto.getLatitude());
-    val userGeoPoint = geometryFactory.createPoint(coordinate);
     val publicPointsCount = MAX_POINTS_COUNT - privatePoints.size();
-    var publicPoints = findAllByUserAndRadius(userGeoPoint, RADIUS, publicPointsCount);
+    var publicPoints = findAllByUserAndRadius(dto.getLongitude(), dto.getLatitude(), RADIUS, publicPointsCount);
     privatePoints.addAll(publicPoints);
     return new GeoPointsDto(privatePoints.stream().map(geoPointMapper::toDto).toList());
   }
