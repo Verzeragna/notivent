@@ -18,53 +18,80 @@ import ru.notivent.service.GeoPointService;
 
 import java.util.UUID;
 
-import static ru.notivent.util.HttpUtil.X_UUID;
+import static org.springframework.http.ResponseEntity.*;
+import static ru.notivent.util.HttpUtil.*;
 
 @RestController
 @RequestMapping("geopoint")
 @RequiredArgsConstructor
 @ExtensionMethod(ResponseEntity.class)
 public class GeoPointController {
-    
-    private final GeoPointService geoPointService;
-    private final GeoPointMapper geoPointMapper;
 
-    /**
-     * Create geo point by user
-     * @param userUuid User UUID
-     * @param dto Geo point data
-     * @return Geo point data
-     */
-    @PostMapping
-    public ResponseEntity<GeoPointDto> createGeoPoint(
-            @RequestHeader(X_UUID) UUID userUuid,
-            @RequestBody GeoPointDto dto) {
-        return geoPointMapper.toDto(geoPointService.createGeoPoint(geoPointMapper.toModel(dto), userUuid)).ok();
-    }
+  private final GeoPointService geoPointService;
+  private final GeoPointMapper geoPointMapper;
 
-    /**
-     * Get geo point data by ID
-     * @param userUuid User UUID
-     * @param uuid Geo point uuid
-     * @return Geo point data
-     */
-    @GetMapping("{id}")
-    public ResponseEntity<GeoPointDto> getGeoPointById(
-            @PathVariable("id") UUID uuid) {
-        return geoPointMapper.toDto(geoPointService.findGeoPointById(uuid)).ok();
-    }
+  /**
+   * Create geo point by user
+   *
+   * @param userUuid User UUID
+   * @param dto Geo point data
+   * @return Geo point data
+   */
+  @PostMapping
+  public ResponseEntity<GeoPointDto> createGeoPoint(
+      @RequestHeader(X_UUID) UUID userUuid, @RequestBody GeoPointDto dto) {
+    return geoPointMapper
+        .toDto(geoPointService.createGeoPoint(geoPointMapper.toModel(dto), userUuid))
+        .ok();
+  }
 
+  /**
+   * Get geo point data by ID
+   *
+   * @param uuid Geo point uuid
+   * @return Geo point data
+   */
+  @GetMapping("{id}")
+  public ResponseEntity<GeoPointDto> getGeoPointById(@PathVariable("id") UUID uuid) {
+    return geoPointMapper.toDto(geoPointService.findGeoPointById(uuid)).ok();
+  }
 
-    /**
-     * Get all user geo points and other public geo points
-     * @param userUuid User UUID
-     * @param dto User current location data
-     * @return List with user geo points and other public geo points
-     */
-    @PostMapping("getAll")
-    public ResponseEntity<GeoPointsDto> getAllGeoPointsForUser(
-            @RequestHeader(X_UUID) UUID userUuid,
-            @RequestBody UserGeoPointDto dto) {
-        return geoPointService.getAllGeoPointsForUser(dto, userUuid).ok();
-    }
+  /**
+   * Get all user geo points and other public geo points
+   *
+   * @param userUuid User UUID
+   * @param dto User current location data
+   * @return List with user geo points and other public geo points
+   */
+  @PostMapping("getAll")
+  public ResponseEntity<GeoPointsDto> getAllGeoPointsForUser(
+      @RequestHeader(X_UUID) UUID userUuid, @RequestBody UserGeoPointDto dto) {
+    return geoPointService.getAllGeoPointsForUser(dto, userUuid).ok();
+  }
+
+  /**
+   * Delete geo point by ID
+   *
+   * @param userUuid User UUID
+   * @param uuid Geo point uuid
+   * @return Operation result
+   */
+  @PostMapping("delete/{id}")
+  public ResponseEntity<Void> deleteGeoPoint(
+      @RequestHeader(X_UUID) UUID userUuid, @PathVariable("id") UUID uuid) {
+    geoPointService.deleteGeoPoint(userUuid, uuid);
+    return ok().build();
+  }
+
+  /**
+   * Check if geo point belongs current user
+   * @param userUuid User UUID
+   * @param uuid Geo point uuid
+   * @return True or false
+   */
+  @PostMapping("{id}/belonguser")
+  public ResponseEntity<Boolean> isGeoPointBelongUser(
+      @RequestHeader(X_UUID) UUID userUuid, @PathVariable("id") UUID uuid) {
+    return geoPointService.isGeoPointBelongUser(userUuid, uuid).ok();
+  }
 }

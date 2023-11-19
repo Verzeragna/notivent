@@ -9,6 +9,7 @@ import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.notivent.dao.GeoPointDao;
+import ru.notivent.dao.GeoPointHistoryDao;
 import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
 import ru.notivent.exception.NotiventException;
@@ -16,6 +17,7 @@ import ru.notivent.mapper.GeoPointMapper;
 import ru.notivent.model.GeoPoint;
 
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 import java.util.UUID;
 
 @Service
@@ -23,6 +25,7 @@ import java.util.UUID;
 public class GeoPointService {
 
   private final GeoPointMapper geoPointMapper;
+  private final GeoPointHistoryService geoPointHistoryService;
 
   // TODO: This setting will be made by the user in the future
   private static final int MAX_POINTS_COUNT = 1000;
@@ -50,8 +53,23 @@ public class GeoPointService {
   public GeoPointsDto getAllGeoPointsForUser(UserGeoPointDto dto, UUID userUuid) {
     var privatePoints = findByUser(userUuid);
     val publicPointsCount = MAX_POINTS_COUNT - privatePoints.size();
-    var publicPoints = findAllByUserAndRadius(dto.getLongitude(), dto.getLatitude(), RADIUS, publicPointsCount);
+    var publicPoints =
+        findAllByUserAndRadius(dto.getLongitude(), dto.getLatitude(), RADIUS, publicPointsCount);
     privatePoints.addAll(publicPoints);
     return new GeoPointsDto(privatePoints.stream().map(geoPointMapper::toDto).toList());
+  }
+
+  public void deleteGeoPoint(UUID userUuid, UUID geoPointUuid) {
+    //Условие не удалять. Защита от дурака.
+    if (isGeoPointBelongUser(userUuid, geoPointUuid)) {
+      val geoPoint = findGeoPointById(geoPointUuid);
+      geoPointHistoryService.create(geoPoint);
+      deleteById(geoPointUuid);
+    }
+  }
+
+  public Boolean isGeoPointBelongUser(UUID userUuid, UUID geoPointUuid) {
+    val geoPoint = findGeoPointById(geoPointUuid);
+    return Objects.equals(geoPoint.getUserUuid(), userUuid);
   }
 }

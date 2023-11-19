@@ -14,6 +14,8 @@ public interface GeoPointDao {
 
   GeoPoint create(@Param("entity") GeoPoint geoPoint);
 
+  void deleteById(@Param("uuid") UUID uuid);
+
   Optional<GeoPoint> findById(@Param("uuid") UUID uuid);
 
   List<GeoPoint> findByUser(@Param("userUuid") UUID userUuid);

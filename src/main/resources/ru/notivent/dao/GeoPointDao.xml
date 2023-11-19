@@ -12,6 +12,12 @@
         RETURNING *
     </select>
 
+    <delete id="deleteById">
+        DELETE
+        FROM mvp.geo_point
+        WHERE uuid = #{uuid}
+    </delete>
+
     <select id="findById" resultType="ru.notivent.model.GeoPoint">
         SELECT *
         FROM mvp.geo_point
