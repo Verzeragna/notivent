@@ -1,0 +1,28 @@
+package ru.notivent.controller;
+
+import static ru.notivent.util.HttpUtil.X_UUID;
+
+import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.experimental.ExtensionMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import ru.notivent.dto.TariffDto;
+import ru.notivent.service.TariffService;
+
+@RestController
+@RequestMapping("tariff")
+@AllArgsConstructor
+@ExtensionMethod(ResponseEntity.class)
+public class TariffController {
+
+  private final TariffService tariffService;
+
+  @GetMapping("all")
+  public ResponseEntity<TariffDto> getAllTariffs(@RequestHeader(X_UUID) UUID userUuid) {
+    return tariffService.getAllTariffs(userUuid).ok();
+  }
+}

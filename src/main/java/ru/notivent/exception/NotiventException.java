@@ -8,4 +8,9 @@ public class NotiventException extends RuntimeException {
     public NotiventException(HttpStatus status) {
         this.status = status;
     }
+
+    public NotiventException(String message, HttpStatus status) {
+        super(message);
+        this.status = status;
+    }
 }
