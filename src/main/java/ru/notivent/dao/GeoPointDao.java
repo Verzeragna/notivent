@@ -25,4 +25,10 @@ public interface GeoPointDao {
       @Param("latitude") double latitude,
       @Param("radius") double radius,
       @Param("limit") int limit);
+
+  boolean isPointsHaveAcceptableDistance(@Param("distance") int distance,
+                                         @Param("longitude") double longitude,
+                                         @Param("latitude") double latitude,
+                                         @Param("userLongitude") double userLongitude,
+                                         @Param("userLatitude") double userLatitude);
 }

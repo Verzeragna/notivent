@@ -40,9 +40,7 @@ public class GeoPointController {
   @PostMapping
   public ResponseEntity<GeoPointDto> createGeoPoint(
       @RequestHeader(X_UUID) UUID userUuid, @RequestBody GeoPointDto dto) {
-    return geoPointMapper
-        .toDto(geoPointService.createGeoPoint(geoPointMapper.toModel(dto), userUuid))
-        .ok();
+    return geoPointService.createGeoPoint(dto, userUuid);
   }
 
   /**

@@ -70,4 +70,11 @@ public class SubscriptionService {
     }
     return subscriptionDto;
   }
+
+  public boolean isUserHasActiveSubscription(UUID userUuid) {
+    var currentSubscription = findByUserUuid(userUuid);
+    if (currentSubscription.isEmpty()) return false;
+    var subscription = currentSubscription.get();
+    return subscription.getEndAt().isAfter(Instant.now());
+  }
 }
