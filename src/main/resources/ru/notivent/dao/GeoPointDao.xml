@@ -38,4 +38,10 @@
         ORDER BY created_at
         LIMIT #{limit}
     </select>
+
+    <select id="isPointsHaveAcceptableDistance" resultType="boolean">
+        SELECT ST_Distance(
+        ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography,
+        ST_SetSRID(ST_MakePoint(#{userLongitude}, #{userLatitude}), 4326)::geography) &lt; #{distance};
+    </select>
 </mapper>

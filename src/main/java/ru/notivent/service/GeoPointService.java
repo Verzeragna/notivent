@@ -7,12 +7,17 @@ import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.notivent.dao.GeoPointDao;
 import ru.notivent.dao.GeoPointHistoryDao;
+import ru.notivent.dto.GeoPointDto;
 import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
+import ru.notivent.enums.GeoPointType;
+import ru.notivent.exception.DistanceAcceptableException;
 import ru.notivent.exception.NotiventException;
+import ru.notivent.exception.SubscriptionException;
 import ru.notivent.mapper.GeoPointMapper;
 import ru.notivent.model.GeoPoint;
 
@@ -26,6 +31,7 @@ public class GeoPointService {
 
   private final GeoPointMapper geoPointMapper;
   private final GeoPointHistoryService geoPointHistoryService;
+  private final SubscriptionService subscriptionService;
 
   // TODO: This setting will be made by the user in the future
   private static final int MAX_POINTS_COUNT = 1000;
@@ -34,14 +40,29 @@ public class GeoPointService {
   // We use geography function. In this case here we use distance in meters
   private static final double RADIUS = 10000.0;
 
+  // distance in meters
+  private static final int MAX_DISTANCE = 1000;
+
   @Delegate private final GeoPointDao geoPointDao;
 
-  public GeoPoint createGeoPoint(GeoPoint geoPoint, UUID userUuid) {
-    val geoPointLive = geoPoint.getCreatedAt().plus(1, ChronoUnit.DAYS);
-    geoPoint.setLive(geoPointLive);
-    geoPoint.setUserUuid(userUuid);
-    val createdPoint = create(geoPoint);
-    return createdPoint;
+  public ResponseEntity<GeoPointDto> createGeoPoint(GeoPointDto dto, UUID userUuid) throws SubscriptionException, DistanceAcceptableException  {
+    if (Objects.equals(dto.getType(), GeoPointType.PUBLIC)
+        && !subscriptionService.isUserHasActiveSubscription(userUuid)) {
+      return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+    var isAcceptable =
+        isPointsHaveAcceptableDistance(
+            MAX_DISTANCE,
+            dto.getLongitude(),
+            dto.getLatitude(),
+            dto.getUserLongitude(),
+            dto.getUserLatitude());
+    if (!isAcceptable) return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+    var geoPointModel = geoPointMapper.toModel(dto);
+    val geoPointLive = dto.getCreatedAt().plus(1, ChronoUnit.DAYS);
+    geoPointModel.setLive(geoPointLive);
+    geoPointModel.setUserUuid(userUuid);
+    return ResponseEntity.ok(geoPointMapper.toDto(create(geoPointModel)));
   }
 
   public GeoPoint findGeoPointById(UUID uuid) {
@@ -60,7 +81,7 @@ public class GeoPointService {
   }
 
   public void deleteGeoPoint(UUID userUuid, UUID geoPointUuid) {
-    //Условие не удалять. Защита от дурака.
+    // Условие не удалять. Защита от дурака.
     if (isGeoPointBelongUser(userUuid, geoPointUuid)) {
       val geoPoint = findGeoPointById(geoPointUuid);
       geoPointHistoryService.create(geoPoint);
