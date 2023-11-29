@@ -10,6 +10,12 @@
         RETURNING *
     </select>
 
+    <select id="findById" resultType="ru.notivent.model.User">
+        SELECT *
+        FROM mvp.user
+        WHERE uuid = #{uuid}
+    </select>
+
     <select id="findByUserName" resultType="ru.notivent.model.User">
         SELECT *
         FROM mvp.user
