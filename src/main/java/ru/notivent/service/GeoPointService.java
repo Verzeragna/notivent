@@ -1,30 +1,23 @@
 package ru.notivent.service;
 
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Delegate;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.PrecisionModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.notivent.dao.GeoPointDao;
-import ru.notivent.dao.GeoPointHistoryDao;
 import ru.notivent.dto.GeoPointDto;
 import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
 import ru.notivent.enums.GeoPointType;
-import ru.notivent.exception.DistanceAcceptableException;
-import ru.notivent.exception.NotiventException;
-import ru.notivent.exception.SubscriptionException;
 import ru.notivent.mapper.GeoPointMapper;
-import ru.notivent.model.GeoPoint;
 
-import java.time.temporal.ChronoUnit;
-import java.util.Objects;
-import java.util.UUID;
-
+@Slf4j
 @Service
 @AllArgsConstructor
 public class GeoPointService {
@@ -45,7 +38,7 @@ public class GeoPointService {
 
   @Delegate private final GeoPointDao geoPointDao;
 
-  public ResponseEntity<GeoPointDto> createGeoPoint(GeoPointDto dto, UUID userUuid) throws SubscriptionException, DistanceAcceptableException  {
+  public ResponseEntity<GeoPointDto> createGeoPoint(GeoPointDto dto, UUID userUuid) {
     if (Objects.equals(dto.getType(), GeoPointType.PUBLIC)
         && !subscriptionService.isUserHasActiveSubscription(userUuid)) {
       return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
@@ -65,10 +58,11 @@ public class GeoPointService {
     return ResponseEntity.ok(geoPointMapper.toDto(create(geoPointModel)));
   }
 
-  public GeoPoint findGeoPointById(UUID uuid) {
+  public ResponseEntity<GeoPointDto> findGeoPointById(UUID uuid) {
     var geoPoint = findById(uuid);
-    if (geoPoint.isPresent()) return geoPoint.get();
-    throw new NotiventException(HttpStatus.BAD_REQUEST);
+    return geoPoint
+        .map(point -> ResponseEntity.ok(geoPointMapper.toDto(point)))
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
   }
 
   public GeoPointsDto getAllGeoPointsForUser(UserGeoPointDto dto, UUID userUuid) {
@@ -83,14 +77,22 @@ public class GeoPointService {
   public void deleteGeoPoint(UUID userUuid, UUID geoPointUuid) {
     // Условие не удалять. Защита от дурака.
     if (isGeoPointBelongUser(userUuid, geoPointUuid)) {
-      val geoPoint = findGeoPointById(geoPointUuid);
-      geoPointHistoryService.create(geoPoint);
-      deleteById(geoPointUuid);
+      var geoPoint = findById(geoPointUuid);
+      if (geoPoint.isPresent()) {
+        geoPointHistoryService.create(geoPoint.get());
+        deleteById(geoPointUuid);
+      } else {
+        log.error("Geo point with UUID {} not found for user {}.", geoPointUuid, userUuid);
+      }
     }
   }
 
   public Boolean isGeoPointBelongUser(UUID userUuid, UUID geoPointUuid) {
-    val geoPoint = findGeoPointById(geoPointUuid);
-    return Objects.equals(geoPoint.getUserUuid(), userUuid);
+    var geoPoint = findById(geoPointUuid);
+    if (geoPoint.isPresent()) {
+      return Objects.equals(geoPoint.get().getUserUuid(), userUuid);
+    }
+    log.error("Geo point with UUID {} not found for user {}.", geoPointUuid, userUuid);
+    return false;
   }
 }
