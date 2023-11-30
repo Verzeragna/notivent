@@ -1,31 +1,32 @@
 package ru.notivent.service;
 
-import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import ru.notivent.dto.AuthDto;
-import ru.notivent.exception.NotiventException;
-import ru.notivent.model.User;
-
 import java.util.Objects;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import ru.notivent.dto.AuthDto;
+import ru.notivent.model.User;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class AuthenticationService {
 
   private final UserService userService;
 
-  public UUID authRegister(AuthDto dto) {
+  public ResponseEntity<UUID> authRegister(AuthDto dto) {
     var user = userService.findByUserName(dto.getUserName());
     if (user.isEmpty()) {
         var newUser = createUser(dto);
-        return newUser.getUuid();
+        return ResponseEntity.ok(newUser.getUuid());
     }
     if (comparePasswords(dto.getPassword(), user.get().getPassword())) {
-        return user.get().getUuid();
+        return ResponseEntity.ok(user.get().getUuid());
     }
-    throw new NotiventException(HttpStatus.BAD_REQUEST);
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   private User createUser(AuthDto dto) {

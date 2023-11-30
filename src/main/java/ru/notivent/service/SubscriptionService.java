@@ -5,17 +5,19 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Delegate;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.notivent.dao.SubscriptionDao;
 import ru.notivent.dto.TariffDto;
 import ru.notivent.dto.UserSubscriptionDto;
-import ru.notivent.exception.UserNotFoundException;
 import ru.notivent.mapper.TariffMapper;
 import ru.notivent.model.Subscription;
 import ru.notivent.model.Tariff;
 
+@Slf4j
 @Service
 @AllArgsConstructor
 public class SubscriptionService {
@@ -28,9 +30,9 @@ public class SubscriptionService {
 
   public void subscribe(UUID userUuid, TariffDto dto) {
     val user = userService.findById(userUuid);
-    if (user.isEmpty())
-      throw new UserNotFoundException(
-          "User with ID %s not found".formatted(userUuid), HttpStatus.BAD_REQUEST);
+    if (user.isEmpty()) {
+      log.error("User with UUID {} not found", userUuid);
+    }
     var currentSubscription = findByUserUuid(userUuid);
     if (currentSubscription.isPresent()) {
       updateSubscription(currentSubscription.get());
@@ -55,11 +57,12 @@ public class SubscriptionService {
     create(subscription);
   }
 
-  public UserSubscriptionDto findUserSubscription(UUID userUuid) {
+  public ResponseEntity<UserSubscriptionDto> findUserSubscription(UUID userUuid) {
     val user = userService.findById(userUuid);
-    if (user.isEmpty())
-      throw new UserNotFoundException(
-          "User with ID %s not found".formatted(userUuid), HttpStatus.BAD_REQUEST);
+    if (user.isEmpty()) {
+      log.error("User with UUID {} not found", userUuid);
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
     var currentSubscription = findByUserUuid(userUuid);
     var tariff = tariffService.findAll();
     var subscriptionDto = new UserSubscriptionDto();
@@ -68,7 +71,7 @@ public class SubscriptionService {
       var subscription = currentSubscription.get();
       subscriptionDto.setEndAt(subscription.getEndAt().toString());
     }
-    return subscriptionDto;
+    return ResponseEntity.ok(subscriptionDto);
   }
 
   public boolean isUserHasActiveSubscription(UUID userUuid) {

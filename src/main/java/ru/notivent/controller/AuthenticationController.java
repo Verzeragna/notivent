@@ -15,13 +15,12 @@ import java.util.UUID;
 @RestController
 @RequestMapping("auth")
 @AllArgsConstructor
-@ExtensionMethod(ResponseEntity.class)
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
     @PostMapping
     public ResponseEntity<UUID> authRegister(@RequestBody AuthDto authDto) {
-        return authenticationService.authRegister(authDto).ok();
+        return authenticationService.authRegister(authDto);
     }
 }

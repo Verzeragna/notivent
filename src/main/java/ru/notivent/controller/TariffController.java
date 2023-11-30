@@ -16,13 +16,12 @@ import ru.notivent.service.TariffService;
 @RestController
 @RequestMapping("tariff")
 @AllArgsConstructor
-@ExtensionMethod(ResponseEntity.class)
 public class TariffController {
 
   private final TariffService tariffService;
 
   @GetMapping("all")
   public ResponseEntity<TariffDto> getAllTariffs(@RequestHeader(X_UUID) UUID userUuid) {
-    return tariffService.getAllTariffs(userUuid).ok();
+    return tariffService.getAllTariffs(userUuid);
   }
 }

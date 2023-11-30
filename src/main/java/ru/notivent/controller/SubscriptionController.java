@@ -21,7 +21,6 @@ import static ru.notivent.util.HttpUtil.*;
 @RestController
 @RequestMapping("subscription")
 @AllArgsConstructor
-@ExtensionMethod(ResponseEntity.class)
 public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
@@ -34,6 +33,6 @@ public class SubscriptionController {
 
     @GetMapping
     public ResponseEntity<UserSubscriptionDto> findUserSubscription(@RequestHeader(X_UUID) UUID userUuid) {
-        return subscriptionService.findUserSubscription(userUuid).ok();
+        return subscriptionService.findUserSubscription(userUuid);
     }
 }
