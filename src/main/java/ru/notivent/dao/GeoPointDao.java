@@ -31,4 +31,7 @@ public interface GeoPointDao {
                                          @Param("latitude") double latitude,
                                          @Param("userLongitude") double userLongitude,
                                          @Param("userLatitude") double userLatitude);
+
+  void updateGrade(@Param("uuid") UUID uuid,
+                   @Param("grade") Integer grade);
 }

@@ -44,4 +44,10 @@
         ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography,
         ST_SetSRID(ST_MakePoint(#{userLongitude}, #{userLatitude}), 4326)::geography) &lt; #{distance};
     </select>
+
+    <update id="updateGrade">
+        UPDATE mvp.geo_point
+        SET grade = #{grade}
+        WHERE uuid = #{uuid}
+    </update>
 </mapper>

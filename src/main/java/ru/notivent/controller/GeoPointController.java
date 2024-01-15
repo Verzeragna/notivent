@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.notivent.dto.GeoPointDto;
 import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
+import ru.notivent.enums.GradeType;
 import ru.notivent.mapper.GeoPointMapper;
 import ru.notivent.service.GeoPointService;
 
@@ -91,5 +92,11 @@ public class GeoPointController {
   public ResponseEntity<Boolean> isGeoPointBelongUser(
       @RequestHeader(X_UUID) UUID userUuid, @PathVariable("id") UUID uuid) {
     return geoPointService.isGeoPointBelongUser(userUuid, uuid).ok();
+  }
+
+  @PostMapping("{id}/grade/{value}")
+  public ResponseEntity<Integer> setGeoPointGrade(
+          @RequestHeader(X_UUID) UUID userUuid, @PathVariable("id") UUID uuid, @PathVariable("value") GradeType gradeValue) {
+    return geoPointService.setGeoPointGrade(userUuid, uuid, gradeValue);
   }
 }
