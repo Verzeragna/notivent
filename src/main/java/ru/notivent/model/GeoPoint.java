@@ -24,4 +24,5 @@ public class GeoPoint {
     String description;
     Instant createdAt;
     Instant live;
+    Integer grade;
 }

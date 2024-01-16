@@ -21,4 +21,5 @@ public class GeoPointDto {
     String name;
     String description;
     Instant createdAt;
+    Integer grade;
 }

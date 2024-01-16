@@ -15,7 +15,10 @@ import ru.notivent.dto.GeoPointDto;
 import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
 import ru.notivent.enums.GeoPointType;
+import ru.notivent.enums.GradeType;
 import ru.notivent.mapper.GeoPointMapper;
+import ru.notivent.model.GeoPoint;
+import ru.notivent.model.GradeLog;
 
 @Slf4j
 @Service
@@ -25,6 +28,7 @@ public class GeoPointService {
   private final GeoPointMapper geoPointMapper;
   private final GeoPointHistoryService geoPointHistoryService;
   private final SubscriptionService subscriptionService;
+  private final GradeLogService gradeLogService;
 
   // TODO: This setting will be made by the user in the future
   private static final int MAX_POINTS_COUNT = 1000;
@@ -60,9 +64,15 @@ public class GeoPointService {
 
   public ResponseEntity<GeoPointDto> findGeoPointById(UUID uuid) {
     var geoPoint = findById(uuid);
-    return geoPoint
-        .map(point -> ResponseEntity.ok(geoPointMapper.toDto(point)))
-        .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    if (geoPoint.isPresent()) {
+      var point = geoPoint.get();
+      if (Objects.equals(point.getType(), GeoPointType.PUBLIC)
+          && !subscriptionService.isUserHasActiveSubscription(point.getUserUuid())) {
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+      }
+      return ResponseEntity.ok(geoPointMapper.toDto(point));
+    }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   public GeoPointsDto getAllGeoPointsForUser(UserGeoPointDto dto, UUID userUuid) {
@@ -94,5 +104,47 @@ public class GeoPointService {
     }
     log.error("Geo point with UUID {} not found for user {}.", geoPointUuid, userUuid);
     return false;
+  }
+
+  public ResponseEntity<Integer> setGeoPointGrade(
+      UUID userUuid, UUID geoPointUuid, GradeType gradeValue) {
+    var geoPoint = findById(geoPointUuid);
+    if (geoPoint.isPresent()) {
+      var point = geoPoint.get();
+      if (!updateGradeLog(point, gradeValue)) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+      var newGrade = updateGrade(point.getGrade(), gradeValue);
+      updateGrade(geoPointUuid, newGrade);
+      return ResponseEntity.ok(newGrade);
+    }
+    log.error("Geo point with UUID {} not found for user {}.", geoPointUuid, userUuid);
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
+
+  private Integer updateGrade(Integer grade, GradeType gradeValue) {
+    if (gradeValue.equals(GradeType.PLUS)) {
+      return grade + 1;
+    }
+    return grade - 1;
+  }
+
+  private boolean updateGradeLog(GeoPoint point, GradeType gradeValue) {
+    var gradeLog = gradeLogService.findByGeoPointAndUser(point.getUuid(), point.getUserUuid());
+    if (gradeLog.isPresent()) {
+      var grade = gradeLog.get();
+      if (grade.getGradeType().equals(gradeValue)) {
+        return false;
+      }
+      grade.setGradeType(gradeValue);
+      gradeLogService.updateGradeType(grade);
+      return true;
+    }
+    var newGradeLog =
+        GradeLog.builder()
+            .userUuid(point.getUserUuid())
+            .geoPointUuid(point.getUuid())
+            .gradeType(gradeValue)
+            .build();
+    gradeLogService.create(newGradeLog);
+    return true;
   }
 }

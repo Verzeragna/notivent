@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.notivent.dao.GradeLogDao">
+
+    <insert id="create" parameterType="map">
+        INSERT INTO mvp.grade_log(user_uuid,grade_type,geo_point_uuid)
+        VALUES(#{entity.userUuid}::uuid,#{entity.gradeType}::mvp.grade_type,#{entity.geoPointUuid})
+    </insert>
+
+    <select id="findByGeoPointAndUser" resultType="ru.notivent.model.GradeLog">
+        SELECT *
+        FROM mvp.grade_log
+        WHERE geo_point_uuid = #{pointUuid}
+        AND user_uuid = #{userUuid}
+    </select>
+
+    <update id="updateGradeType" parameterType="map">
+        UPDATE mvp.grade_log
+        SET grade_type = #{entity.gradeType},
+            date = now()
+        WHERE uuid = #{entity.uuid}
+    </update>
+
+</mapper>
