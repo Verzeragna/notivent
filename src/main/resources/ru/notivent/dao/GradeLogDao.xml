@@ -18,7 +18,7 @@
 
     <update id="updateGradeType" parameterType="map">
         UPDATE mvp.grade_log
-        SET grade_type = #{entity.gradeType},
+        SET grade_type = #{entity.gradeType}::mvp.grade_type,
             date = now()
         WHERE uuid = #{entity.uuid}
     </update>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.notivent.dao.CommentDao">
+
+    <resultMap id="CommentMap" type="ru.notivent.model.Comment">
+        <id column="com_uuid" property="uuid"/>
+        <result column="com_text" property="text"/>
+        <result column="com_created_at" property="createdAt"/>
+        <association property="user" javaType="ru.notivent.model.User">
+            <result column="user_uuid" property="uuid"/>
+            <result column="user_nick_name" property="nickName"/>
+        </association>
+        <association property="geoPoint" javaType="ru.notivent.model.GeoPoint">
+            <result column="p_uuid" property="uuid"/>
+        </association>
+    </resultMap>
+
+    <select id="findAllByGeoPoint" resultMap="CommentMap">
+        SELECT
+            c.uuid AS com_uuid,
+            c.text AS com_text,
+            c.created_at AS com_created_at,
+            u.uuid AS user_uuid,
+            u.nick_name AS user_nick_name,
+            gp.uuid AS p_uuid
+        FROM mvp.geo_point_comments c
+        JOIN mvp.user u ON c.user_uuid = u.uuid
+        JOIN mvp.geo_point gp ON c.geo_point_uuid = gp.uuid
+        WHERE c.geo_point_uuid = #{uuid}
+    </select>
+
+    <insert id="create" parameterType="map">
+        INSERT INTO mvp.geo_point_comments(user_uuid,geo_point_uuid,text)
+        VALUES(#{entity.user.uuid},#{entity.geoPoint.uuid},#{entity.text})
+    </insert>
+</mapper>
