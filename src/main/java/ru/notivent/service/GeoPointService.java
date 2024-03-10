@@ -63,12 +63,12 @@ public class GeoPointService {
     return ResponseEntity.ok(geoPointMapper.toDto(create(geoPointModel)));
   }
 
-  public ResponseEntity<GeoPointDto> findGeoPointById(UUID uuid) {
+  public ResponseEntity<GeoPointDto> findGeoPointById(UUID userUuid, UUID uuid) {
     var geoPoint = findById(uuid);
     if (geoPoint.isPresent()) {
       var point = geoPoint.get();
       if (Objects.equals(point.getType(), GeoPointType.PUBLIC)
-          && !subscriptionService.isUserHasActiveSubscription(point.getUserUuid())) {
+          && !subscriptionService.isUserHasActiveSubscription(userUuid)) {
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
       }
       var pointDto = geoPointMapper.toDto(point);

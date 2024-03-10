@@ -48,8 +48,8 @@ public class GeoPointController {
    * @return Geo point data
    */
   @GetMapping("{id}")
-  public ResponseEntity<GeoPointDto> getGeoPointById(@PathVariable("id") UUID uuid) {
-    return geoPointService.findGeoPointById(uuid);
+  public ResponseEntity<GeoPointDto> getGeoPointById(@RequestHeader(X_UUID) UUID userUuid,@PathVariable("id") UUID uuid) {
+    return geoPointService.findGeoPointById(userUuid, uuid);
   }
 
   /**
