@@ -1,5 +1,9 @@
 package ru.notivent.controller;
 
+import static org.springframework.http.ResponseEntity.*;
+import static ru.notivent.util.HttpUtil.*;
+
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +18,7 @@ import ru.notivent.dto.GeoPointDto;
 import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
 import ru.notivent.enums.GradeType;
-import ru.notivent.mapper.GeoPointMapper;
 import ru.notivent.service.GeoPointService;
-
-import java.util.UUID;
-
-import static org.springframework.http.ResponseEntity.*;
-import static ru.notivent.util.HttpUtil.*;
 
 @RestController
 @RequestMapping("geopoint")
@@ -29,7 +27,6 @@ import static ru.notivent.util.HttpUtil.*;
 public class GeoPointController {
 
   private final GeoPointService geoPointService;
-  private final GeoPointMapper geoPointMapper;
 
   /**
    * Create geo point by user
@@ -98,5 +95,10 @@ public class GeoPointController {
   public ResponseEntity<Integer> setGeoPointGrade(
           @RequestHeader(X_UUID) UUID userUuid, @PathVariable("id") UUID uuid, @PathVariable("value") GradeType gradeValue) {
     return geoPointService.setGeoPointGrade(userUuid, uuid, gradeValue);
+  }
+
+  @GetMapping("{id}/grade")
+  public ResponseEntity<Integer> getGeoPointGrade(@PathVariable("id") UUID uuid) {
+    return geoPointService.getGeoPointGrade(uuid);
   }
 }

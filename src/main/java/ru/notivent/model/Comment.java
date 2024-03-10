@@ -12,10 +12,10 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class User {
+public class Comment {
     UUID uuid;
-    String userName;
-    String password;
+    User user;
+    GeoPoint geoPoint;
+    String text;
     Instant createdAt;
-    String nickName;
 }

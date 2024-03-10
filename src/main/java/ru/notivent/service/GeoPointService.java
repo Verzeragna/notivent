@@ -16,6 +16,7 @@ import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
 import ru.notivent.enums.GeoPointType;
 import ru.notivent.enums.GradeType;
+import ru.notivent.mapper.CommentMapper;
 import ru.notivent.mapper.GeoPointMapper;
 import ru.notivent.model.GeoPoint;
 import ru.notivent.model.GradeLog;
@@ -25,17 +26,19 @@ import ru.notivent.model.GradeLog;
 @AllArgsConstructor
 public class GeoPointService {
 
-  private final GeoPointMapper geoPointMapper;
-  private final GeoPointHistoryService geoPointHistoryService;
-  private final SubscriptionService subscriptionService;
-  private final GradeLogService gradeLogService;
+  final GeoPointMapper geoPointMapper;
+  final GeoPointHistoryService geoPointHistoryService;
+  final SubscriptionService subscriptionService;
+  final GradeLogService gradeLogService;
+  final CommentService commentService;
+  final CommentMapper commentMapper;
 
   // TODO: This setting will be made by the user in the future
   private static final int MAX_POINTS_COUNT = 1000;
 
   // TODO: This setting will be made by the user in the future
   // We use geography function. In this case here we use distance in meters
-  private static final double RADIUS = 10000.0;
+  private static final double RADIUS = 30000.0;
 
   // distance in meters
   private static final int MAX_DISTANCE = 1000;
@@ -70,7 +73,8 @@ public class GeoPointService {
           && !subscriptionService.isUserHasActiveSubscription(point.getUserUuid())) {
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
       }
-      return ResponseEntity.ok(geoPointMapper.toDto(point));
+      var pointDto = geoPointMapper.toDto(point);
+      return ResponseEntity.ok(pointDto);
     }
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
@@ -146,5 +150,14 @@ public class GeoPointService {
             .build();
     gradeLogService.create(newGradeLog);
     return true;
+  }
+
+  public ResponseEntity<Integer> getGeoPointGrade(UUID geoPointUuid) {
+    var geoPoint = findById(geoPointUuid);
+    if (geoPoint.isPresent()) {
+      return ResponseEntity.ok(geoPoint.get().getGrade());
+    }
+    log.error("Geo point with UUID {} not found.", geoPointUuid);
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 }

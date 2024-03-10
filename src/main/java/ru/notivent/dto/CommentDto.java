@@ -1,7 +1,6 @@
-package ru.notivent.model;
+package ru.notivent.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -9,13 +8,11 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class User {
+@NoArgsConstructor
+public class CommentDto {
     UUID uuid;
-    String userName;
-    String password;
-    Instant createdAt;
     String nickName;
+    String text;
+    Instant createdAt;
 }
