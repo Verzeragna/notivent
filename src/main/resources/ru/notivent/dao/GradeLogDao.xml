@@ -13,7 +13,7 @@
         SELECT *
         FROM mvp.grade_log
         WHERE geo_point_uuid = #{pointUuid}
-        AND user_uuid = #{userUuid}
+        AND user_uuid = #{userUuid}::uuid
     </select>
 
     <update id="updateGradeType" parameterType="map">
@@ -22,5 +22,10 @@
             date = now()
         WHERE uuid = #{entity.uuid}
     </update>
+
+    <delete id="delete" parameterType="map">
+        DELETE FROM mvp.grade_log
+        WHERE uuid = #{entity.uuid}::uuid
+    </delete>
 
 </mapper>

@@ -16,4 +16,6 @@ public interface GradeLogDao {
                                              @Param("userUuid") UUID userUuid);
 
     void updateGradeType(@Param("entity") GradeLog entity);
+
+    void delete(@Param("entity") GradeLog entity);
 }
