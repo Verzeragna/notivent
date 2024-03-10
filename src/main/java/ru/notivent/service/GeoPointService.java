@@ -30,8 +30,6 @@ public class GeoPointService {
   final GeoPointHistoryService geoPointHistoryService;
   final SubscriptionService subscriptionService;
   final GradeLogService gradeLogService;
-  final CommentService commentService;
-  final CommentMapper commentMapper;
 
   // TODO: This setting will be made by the user in the future
   private static final int MAX_POINTS_COUNT = 1000;
@@ -138,8 +136,7 @@ public class GeoPointService {
       if (grade.getGradeType().equals(gradeValue)) {
         return false;
       }
-      grade.setGradeType(gradeValue);
-      gradeLogService.updateGradeType(grade);
+      gradeLogService.delete(grade);
       return true;
     }
     var newGradeLog =
