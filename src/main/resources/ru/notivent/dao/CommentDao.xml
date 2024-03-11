@@ -29,6 +29,7 @@
         JOIN mvp.user u ON c.user_uuid = u.uuid
         JOIN mvp.geo_point gp ON c.geo_point_uuid = gp.uuid
         WHERE c.geo_point_uuid = #{uuid}
+        ORDER BY c.created_at DESC
     </select>
 
     <insert id="create" parameterType="map">
