@@ -11,5 +11,7 @@ import java.util.UUID;
 public interface CommentDao {
     List<Comment> findAllByGeoPoint(@Param("uuid") UUID uuid);
 
+    Integer countCommentsByGeoPoint(@Param("uuid") UUID uuid);
+
     void create(@Param("entity") Comment entity);
 }
