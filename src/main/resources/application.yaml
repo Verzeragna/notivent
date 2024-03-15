@@ -18,6 +18,20 @@ spring:
     password: 05konrad05
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
+  mail:
+    host: smtp.mail.ru
+    username:
+    password:
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          port: 25
+          auth: true
+          starttls:
+            enable: true
+            required: true
 
 mybatis:
   configuration:

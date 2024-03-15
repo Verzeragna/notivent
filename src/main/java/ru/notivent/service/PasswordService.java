@@ -1,6 +1,9 @@
 package ru.notivent.service;
 
 import io.jsonwebtoken.io.Decoders;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -38,5 +41,23 @@ public class PasswordService {
   public String decodeBase64(String password) throws IllegalArgumentException {
     if (password == null || password.isBlank()) throw new IllegalArgumentException();
     return new String(Decoders.BASE64.decode(password));
+  }
+
+  public String generatePassword() {
+    var generator = new PasswordGenerator();
+
+    var lowerCaseChars = EnglishCharacterData.LowerCase;
+    var lowerCaseRule = new CharacterRule(lowerCaseChars);
+    lowerCaseRule.setNumberOfCharacters(2);
+
+    var upperCaseChars = EnglishCharacterData.UpperCase;
+    var upperCaseRule = new CharacterRule(upperCaseChars);
+    upperCaseRule.setNumberOfCharacters(2);
+
+    var digitChars = EnglishCharacterData.Digit;
+    var digitRule = new CharacterRule(digitChars);
+    digitRule.setNumberOfCharacters(2);
+
+    return generator.generatePassword(6, lowerCaseRule, upperCaseRule, digitRule);
   }
 }
