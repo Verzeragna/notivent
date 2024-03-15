@@ -15,26 +15,26 @@ import ru.notivent.model.User;
 @AllArgsConstructor
 public class AuthenticationService {
 
-  private final UserService userService;
+  final UserService userService;
+  final PasswordService passwordService;
 
   public ResponseEntity<UUID> authRegister(AuthDto dto) {
-    var user = userService.findByUserName(dto.getUserName());
-    if (user.isEmpty()) {
-        var newUser = createUser(dto);
-        return ResponseEntity.ok(newUser.getUuid());
+    var userOpt = userService.findByUserName(dto.getUserName());
+    if (userOpt.isEmpty()) {
+      var newUser = createUser(dto);
+      return ResponseEntity.ok(newUser.getUuid());
     }
-    if (comparePasswords(dto.getPassword(), user.get().getPassword())) {
-        return ResponseEntity.ok(user.get().getUuid());
+    var user = userOpt.get();
+    if (passwordService.matches(passwordService.decodeBase64(dto.getPassword()), user.getPassword())) {
+      return ResponseEntity.ok(user.getUuid());
     }
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   private User createUser(AuthDto dto) {
+    dto.setPassword(passwordService.encrypt(passwordService.decodeBase64(dto.getPassword())));
     var newUser = User.builder().userName(dto.getUserName()).password(dto.getPassword()).build();
     return userService.create(newUser);
   }
 
-  private boolean comparePasswords(String dtoPassword, String dbPassword) {
-      return Objects.equals(dtoPassword, dbPassword);
-  }
 }
