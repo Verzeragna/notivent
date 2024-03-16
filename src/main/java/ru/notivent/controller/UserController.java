@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.notivent.dto.ResetPasswordDto;
+import ru.notivent.dto.PasswordChangeDto;
+import ru.notivent.dto.PasswordResetDto;
 import ru.notivent.service.UserService;
 
 @RestController
@@ -31,8 +32,13 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("reset/password")
-    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordDto dto) {
-        return userService.resetPassword(dto.getEmail());
+    @PostMapping("password/reset")
+    public ResponseEntity<Void> passwordReset(@RequestBody PasswordResetDto dto) {
+        return userService.passwordReset(dto.getEmail());
+    }
+
+    @PostMapping("password/change")
+    public ResponseEntity<Void> passwordChange(@RequestHeader(X_UUID) UUID userUuid, @RequestBody PasswordChangeDto dto) {
+        return userService.passwordChange(userUuid, dto);
     }
 }

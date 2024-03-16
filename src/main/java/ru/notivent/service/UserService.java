@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.notivent.dao.UserDao;
+import ru.notivent.dto.PasswordChangeDto;
 
 @Service
 @AllArgsConstructor
@@ -29,7 +30,7 @@ public class UserService {
     user.ifPresent(u -> userDao.updateNickNameById(userUuid, userName));
   }
 
-  public ResponseEntity<Void> resetPassword(String email) {
+  public ResponseEntity<Void> passwordReset(String email) {
     var userOpt = findByUserName(email);
     if (userOpt.isPresent()) {
       var user = userOpt.get();
@@ -39,7 +40,22 @@ public class UserService {
       emailService.sendEmail(email, newPassword);
       return ResponseEntity.ok().build();
     } else {
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
+  }
+
+  public ResponseEntity<Void> passwordChange(UUID userUuid, PasswordChangeDto dto) {
+    var userOpt = findById(userUuid);
+    if (userOpt.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+    var user = userOpt.get();
+    var oldPassword = passwordService.decodeBase64(dto.getOldPassword());
+    if (passwordService.matches(oldPassword, user.getPassword())) {
+      var encryptedPassword = passwordService.encrypt(oldPassword);
+      updateUserPassword(user.getUuid(), encryptedPassword);
+      return ResponseEntity.ok().build();
+    }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 }
