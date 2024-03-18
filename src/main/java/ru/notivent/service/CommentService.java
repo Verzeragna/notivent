@@ -26,8 +26,6 @@ public class CommentService {
 
   public ResponseEntity<List<CommentDto>> getComments(UUID geoPointUuid) {
     var comments = findAllByGeoPoint(geoPointUuid);
-    var cmp = comparing(Comment::getCreatedAt);
-    comments.sort(cmp);
     return ResponseEntity.ok(comments.stream().map(commentMapper::toDto).toList());
   }
 
@@ -40,5 +38,9 @@ public class CommentService {
             .build();
     create(comment);
     return ResponseEntity.ok().build();
+  }
+
+  public ResponseEntity<Integer> getGeoPointCommentsCount(UUID geoPointUuid) {
+    return ResponseEntity.ok(countCommentsByGeoPoint(geoPointUuid));
   }
 }

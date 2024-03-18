@@ -57,7 +57,7 @@ public class GeoPointService {
             dto.getUserLatitude());
     if (!isAcceptable) return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
     var geoPointModel = geoPointMapper.toModel(dto);
-    val geoPointLive = dto.getCreatedAt().plus(1, ChronoUnit.DAYS);
+    val geoPointLive = dto.getCreatedAt().plus(7, ChronoUnit.DAYS);
     geoPointModel.setLive(geoPointLive);
     geoPointModel.setUserUuid(userUuid);
     return ResponseEntity.ok(geoPointMapper.toDto(create(geoPointModel)));

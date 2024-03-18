@@ -22,9 +22,15 @@
         WHERE user_name = #{userName}
     </select>
 
+    <update id="updateUserPassword">
+        UPDATE mvp.user
+        SET password = #{password}
+        WHERE uuid = #{uuid}::uuid
+    </update>
+
     <update id="updateNickNameById">
         UPDATE mvp.user
-        SET nick_name = #{NickName}
+        SET nick_name = #{nickName}
         WHERE uuid = #{uuid}::uuid
     </update>
 

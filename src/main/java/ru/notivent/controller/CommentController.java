@@ -29,9 +29,13 @@ public class CommentController {
         return commentService.create(userUuid, dto);
     }
 
-
     @GetMapping("point/{id}")
     public ResponseEntity<List<CommentDto>> getCommentsByGeoPoint(@PathVariable("id") UUID uuid) {
         return commentService.getComments(uuid);
+    }
+
+    @GetMapping("point/{id}/count")
+    public ResponseEntity<Integer> getGeoPointCommentsCount(@PathVariable("id") UUID uuid) {
+        return commentService.getGeoPointCommentsCount(uuid);
     }
 }
