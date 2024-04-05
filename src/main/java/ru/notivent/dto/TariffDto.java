@@ -13,6 +13,8 @@ import ru.notivent.enums.TariffType;
 public class TariffDto {
     UUID uuid;
     String name;
+    String subtitle;
     TariffType type;
     BigDecimal price;
+    PaymentParametersDto paymentParameters;
 }

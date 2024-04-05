@@ -4,20 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import ru.notivent.enums.TariffType;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Tariff {
+public class PaymentParameters {
     UUID uuid;
-    String name;
-    String subtitle;
-    TariffType type;
-    BigDecimal price;
-    PaymentParameters paymentParameters;
+    String clientApplicationKey;
+    String shopId;
+    String authCenterClientId;
 }

@@ -45,4 +45,10 @@
         INSERT INTO mvp.geo_point_comments(user_uuid,geo_point_uuid,text)
         VALUES(#{entity.user.uuid},#{entity.geoPoint.uuid},#{entity.text})
     </insert>
+
+    <delete id="delete">
+        DELETE
+        FROM mvp.geo_point_comments
+        WHERE geo_point_uuid = #{uuid}
+    </delete>
 </mapper>

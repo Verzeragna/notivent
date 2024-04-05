@@ -14,4 +14,5 @@ public interface CommentDao {
     Integer countCommentsByGeoPoint(@Param("uuid") UUID uuid);
 
     void create(@Param("entity") Comment entity);
+    void delete(@Param("uuid") UUID geoPointUuid);
 }

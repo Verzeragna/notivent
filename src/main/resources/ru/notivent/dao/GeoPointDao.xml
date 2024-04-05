@@ -5,10 +5,10 @@
 <mapper namespace="ru.notivent.dao.GeoPointDao">
 
     <select id="create" parameterType="map" resultType="ru.notivent.model.GeoPoint">
-        INSERT INTO mvp.geo_point(user_uuid,latitude,longitude,point,name,description,type,created_at,live)
+        INSERT INTO mvp.geo_point(user_uuid,latitude,longitude,point,name,description,type,created_at,live,user_latitude,user_longitude)
         VALUES(#{entity.userUuid}::uuid,#{entity.latitude},#{entity.longitude},
         ST_SetSRID(ST_MakePoint(#{entity.longitude}, #{entity.latitude}), 4326)::geometry,
-        #{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live})
+        #{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live},#{entity.userLatitude},#{entity.userLongitude})
         RETURNING *
     </select>
 

@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface TariffDao {
     Tariff findAll();
+
+    Tariff findTariffWithPaymentParameters();
 }
