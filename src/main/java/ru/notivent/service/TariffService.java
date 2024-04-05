@@ -30,4 +30,13 @@ public class TariffService {
     }
     return ResponseEntity.ok(tariffMapper.toDto(findAll()));
   }
+
+  public ResponseEntity<TariffDto> getAllTariffsWithPaymentParameters(UUID userUuid) {
+    val user = userService.findById(userUuid);
+    if (user.isEmpty()) {
+      log.error("User with UUID {} not found", userUuid);
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    return ResponseEntity.ok(tariffMapper.toDto(findTariffWithPaymentParameters()));
+  }
 }

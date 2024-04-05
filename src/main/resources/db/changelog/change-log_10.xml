@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet id="10" author="Sergei Andreev">
+        <addColumn tableName="tariff">
+            <column name="subtitle" type="varchar(250)" defaultValue="">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <createTable tableName="payment_parameters" schemaName="mvp">
+            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="client_application_key" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shopId" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="auth_center_clientId" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addColumn tableName="tariff">
+            <column name="payment_parameters_uuid" type="uuid">
+                <constraints foreignKeyName="payment_parameters_uuid_fk" referencedTableName="payment_parameters" referencedColumnNames="uuid"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

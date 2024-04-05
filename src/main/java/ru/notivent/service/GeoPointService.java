@@ -10,6 +10,7 @@ import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.notivent.dao.GeoPointDao;
 import ru.notivent.dto.GeoPointDto;
 import ru.notivent.dto.GeoPointsDto;
@@ -28,6 +29,8 @@ public class GeoPointService {
 
   final GeoPointMapper geoPointMapper;
   final GeoPointHistoryService geoPointHistoryService;
+  final CommentHistoryService commentHistoryService;
+  final CommentService commentService;
   final SubscriptionService subscriptionService;
   final GradeLogService gradeLogService;
 
@@ -86,12 +89,16 @@ public class GeoPointService {
     return new GeoPointsDto(privatePoints.stream().map(geoPointMapper::toDto).toList());
   }
 
+  @Transactional
   public void deleteGeoPoint(UUID userUuid, UUID geoPointUuid) {
     // Условие не удалять. Защита от дурака.
     if (isGeoPointBelongUser(userUuid, geoPointUuid)) {
       var geoPoint = findById(geoPointUuid);
       if (geoPoint.isPresent()) {
         geoPointHistoryService.create(geoPoint.get());
+        var comments = commentService.findAllByGeoPoint(geoPointUuid);
+        commentHistoryService.create(comments);
+        commentService.delete(geoPointUuid);
         deleteById(geoPointUuid);
       } else {
         log.error("Geo point with UUID {} not found for user {}.", geoPointUuid, userUuid);
