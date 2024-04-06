@@ -17,6 +17,7 @@ public class GeoPointDto {
     GeoPointType type;
     double latitude;
     double longitude;
+    Instant live;
     double userLatitude;
     double userLongitude;
     String name;
