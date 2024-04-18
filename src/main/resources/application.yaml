@@ -4,6 +4,15 @@ logging:
     com:
       example:
         demo: DEBUG
+
+management:
+  server:
+    port: 6150
+  endpoints:
+    web:
+      exposure:
+        include: health
+
 server:
   port: 8010
   servlet:
@@ -20,8 +29,8 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
   mail:
     host: smtp.mail.ru
-    username:
-    password:
+    username: notivent@mail.ru
+    password: TFzvVBDVs5ggbMg28mvU
     properties:
       mail:
         transport:

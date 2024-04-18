@@ -14,6 +14,7 @@
     <groupId>ru.notivent</groupId>
     <artifactId>notivent</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>notivent</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>

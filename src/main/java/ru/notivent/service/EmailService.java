@@ -24,7 +24,7 @@ public class EmailService {
     mailMessage.setTo(email);
     mailMessage.setSubject("Сброс пароля!");
     mailMessage.setFrom("Твоя метка");
-    mailMessage.setText("Новый пароль: < " + newPassword + " > " + "Вы можете изменить текущий пароль в разделе <Настройки>." );
+    mailMessage.setText("Новый пароль: < " + newPassword + " > " + "Вы можете изменить текущий пароль в разделе <Настройки>. Отвечать на это письмо не нужно!" );
     return mailMessage;
   }
 }
