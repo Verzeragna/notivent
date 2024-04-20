@@ -24,4 +24,5 @@ public class GeoPointDto {
     String description;
     Instant createdAt;
     Integer grade;
+    LocationDto location;
 }

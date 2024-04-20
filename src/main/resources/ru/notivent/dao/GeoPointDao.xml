@@ -4,11 +4,34 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ru.notivent.dao.GeoPointDao">
 
+    <resultMap id="GeoPointMap" type="ru.notivent.model.GeoPoint">
+        <id column="p_uuid" property="uuid"/>
+        <result column="user_uuid" property="userUuid"/>
+        <result column="type" property="type"/>
+        <result column="latitude" property="latitude"/>
+        <result column="longitude" property="longitude"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="live" property="live"/>
+        <result column="grade" property="grade"/>
+        <association property="location" javaType="ru.notivent.model.Location">
+            <id column="l_uuid" property="id"/>
+            <result column="postal_code" property="postalCode"/>
+            <result column="country" property="country"/>
+            <result column="area" property="area"/>
+            <result column="city" property="city"/>
+            <result column="street" property="street"/>
+            <result column="house_number" property="houseNumber"/>
+            <result column="address_line" property="addressLine"/>
+        </association>
+    </resultMap>
+
     <select id="create" parameterType="map" resultType="ru.notivent.model.GeoPoint">
-        INSERT INTO mvp.geo_point(user_uuid,latitude,longitude,point,name,description,type,created_at,live,user_latitude,user_longitude)
+        INSERT INTO mvp.geo_point(user_uuid,latitude,longitude,point,name,description,type,created_at,live,user_latitude,user_longitude,location_id)
         VALUES(#{entity.userUuid}::uuid,#{entity.latitude},#{entity.longitude},
         ST_SetSRID(ST_MakePoint(#{entity.longitude}, #{entity.latitude}), 4326)::geometry,
-        #{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live},#{entity.userLatitude},#{entity.userLongitude})
+        #{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live},#{entity.userLatitude},#{entity.userLongitude}, #{entity.location.id})
         RETURNING *
     </select>
 
@@ -18,10 +41,29 @@
         WHERE uuid = #{uuid}
     </delete>
 
-    <select id="findById" resultType="ru.notivent.model.GeoPoint">
-        SELECT *
-        FROM mvp.geo_point
-        WHERE uuid = #{uuid}
+    <select id="findById" resultMap="GeoPointMap">
+        SELECT
+            gp.uuid AS p_uuid,
+            gp.user_uuid,
+            gp.type,
+            gp.latitude,
+            gp.longitude,
+            gp.name,
+            gp.description,
+            gp.created_at,
+            gp.live,
+            gp.grade,
+            l.uuid AS l_uuid,
+            l.postal_code,
+            l.country,
+            l.area,
+            l.city,
+            l.street,
+            l.house_number,
+            l.address_line
+        FROM mvp.geo_point gp
+        LEFT JOIN mvp.location l ON gp.location_id = l.uuid
+        WHERE gp.uuid = #{uuid}
     </select>
 
     <select id="findByUser" resultType="ru.notivent.model.GeoPoint">
