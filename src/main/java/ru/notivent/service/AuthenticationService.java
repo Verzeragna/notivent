@@ -32,6 +32,7 @@ public class AuthenticationService {
   }
 
   private User createUser(AuthDto dto) {
+    dto.setUserName(passwordService.decodeBase64(dto.getUserName()));
     dto.setPassword(passwordService.encrypt(passwordService.decodeBase64(dto.getPassword())));
     var newUser = User.builder().userName(dto.getUserName()).password(dto.getPassword()).build();
     return userService.create(newUser);
