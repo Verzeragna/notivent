@@ -15,7 +15,7 @@ import ru.notivent.dao.CommentPostDto;
 import ru.notivent.dto.CommentDto;
 import ru.notivent.service.CommentService;
 
-import static ru.notivent.util.HttpUtil.X_UUID;
+import static ru.notivent.util.HttpUtil.X_AUTH;
 
 @RestController
 @RequestMapping("comment")
@@ -25,7 +25,7 @@ public class CommentController {
     final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestHeader(X_UUID) UUID userUuid, @RequestBody CommentPostDto dto) {
+    public ResponseEntity<Void> create(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody CommentPostDto dto) {
         return commentService.create(userUuid, dto);
     }
 

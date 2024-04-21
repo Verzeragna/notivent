@@ -37,7 +37,7 @@ public class GeoPointController {
    */
   @PostMapping
   public ResponseEntity<GeoPointDto> createGeoPoint(
-      @RequestHeader(X_UUID) UUID userUuid, @RequestBody GeoPointDto dto) {
+          @RequestHeader(X_AUTH) UUID userUuid, @RequestBody GeoPointDto dto) {
     return geoPointService.createGeoPoint(dto, userUuid);
   }
 
@@ -48,7 +48,7 @@ public class GeoPointController {
    * @return Geo point data
    */
   @GetMapping("{id}")
-  public ResponseEntity<GeoPointDto> getGeoPointById(@RequestHeader(X_UUID) UUID userUuid,@PathVariable("id") UUID uuid) {
+  public ResponseEntity<GeoPointDto> getGeoPointById(@RequestHeader(X_AUTH) UUID userUuid, @PathVariable("id") UUID uuid) {
     return geoPointService.findGeoPointById(userUuid, uuid);
   }
 
@@ -61,7 +61,7 @@ public class GeoPointController {
    */
   @PostMapping("getAll")
   public ResponseEntity<GeoPointsDto> getAllGeoPointsForUser(
-      @RequestHeader(X_UUID) UUID userUuid, @RequestBody UserGeoPointDto dto) {
+          @RequestHeader(X_AUTH) UUID userUuid, @RequestBody UserGeoPointDto dto) {
     return geoPointService.getAllGeoPointsForUser(dto, userUuid).ok();
   }
 
@@ -74,7 +74,7 @@ public class GeoPointController {
    */
   @PostMapping("delete/{id}")
   public ResponseEntity<Void> deleteGeoPoint(
-      @RequestHeader(X_UUID) UUID userUuid, @PathVariable("id") UUID uuid) {
+          @RequestHeader(X_AUTH) UUID userUuid, @PathVariable("id") UUID uuid) {
     geoPointService.deleteGeoPoint(userUuid, uuid);
     return ok().build();
   }
@@ -87,13 +87,13 @@ public class GeoPointController {
    */
   @PostMapping("{id}/belonguser")
   public ResponseEntity<Boolean> isGeoPointBelongUser(
-      @RequestHeader(X_UUID) UUID userUuid, @PathVariable("id") UUID uuid) {
+          @RequestHeader(X_AUTH) UUID userUuid, @PathVariable("id") UUID uuid) {
     return geoPointService.isGeoPointBelongUser(userUuid, uuid).ok();
   }
 
   @PostMapping("{id}/grade/{value}")
   public ResponseEntity<Integer> setGeoPointGrade(
-          @RequestHeader(X_UUID) UUID userUuid, @PathVariable("id") UUID uuid, @PathVariable("value") GradeType gradeValue) {
+          @RequestHeader(X_AUTH) UUID userUuid, @PathVariable("id") UUID uuid, @PathVariable("value") GradeType gradeValue) {
     return geoPointService.setGeoPointGrade(userUuid, uuid, gradeValue);
   }
 
