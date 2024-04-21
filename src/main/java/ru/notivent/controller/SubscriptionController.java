@@ -1,5 +1,6 @@
 package ru.notivent.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +26,7 @@ public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
     @PostMapping("subscribe")
-    public ResponseEntity<Void> subscribe(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody TariffDto dto) {
+    public ResponseEntity<Void> subscribe(@RequestHeader(X_AUTH) UUID userUuid, @Valid @RequestBody TariffDto dto) {
         subscriptionService.subscribe(userUuid, dto);
         return ok().build();
     }
