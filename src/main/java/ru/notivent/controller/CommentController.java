@@ -2,6 +2,8 @@ package ru.notivent.controller;
 
 import java.util.List;
 import java.util.UUID;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +27,7 @@ public class CommentController {
     final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<Void> create(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody CommentPostDto dto) {
+    public ResponseEntity<Void> create(@RequestHeader(X_AUTH) UUID userUuid, @Valid @RequestBody CommentPostDto dto) {
         return commentService.create(userUuid, dto);
     }
 

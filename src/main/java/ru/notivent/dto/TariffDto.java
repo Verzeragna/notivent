@@ -2,6 +2,8 @@ package ru.notivent.dto;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,7 @@ import ru.notivent.enums.TariffType;
 @NoArgsConstructor
 @AllArgsConstructor
 public class TariffDto {
+    @NotNull
     UUID uuid;
     String name;
     String subtitle;

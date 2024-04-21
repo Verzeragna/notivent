@@ -4,6 +4,9 @@ import static org.springframework.http.ResponseEntity.*;
 import static ru.notivent.util.HttpUtil.*;
 
 import java.util.UUID;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +40,7 @@ public class GeoPointController {
    */
   @PostMapping
   public ResponseEntity<GeoPointDto> createGeoPoint(
-          @RequestHeader(X_AUTH) UUID userUuid, @RequestBody GeoPointDto dto) {
+          @RequestHeader(X_AUTH) UUID userUuid, @Valid @RequestBody GeoPointDto dto) {
     return geoPointService.createGeoPoint(dto, userUuid);
   }
 

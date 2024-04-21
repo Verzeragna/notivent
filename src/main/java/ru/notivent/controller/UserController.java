@@ -3,6 +3,8 @@ package ru.notivent.controller;
 import static ru.notivent.util.HttpUtil.X_AUTH;
 
 import java.util.UUID;
+
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +40,7 @@ public class UserController {
     }
 
     @PostMapping("password/change")
-    public ResponseEntity<Void> passwordChange(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody PasswordChangeDto dto) {
+    public ResponseEntity<Void> passwordChange(@RequestHeader(X_AUTH) UUID userUuid, @Valid @RequestBody PasswordChangeDto dto) {
         return userService.passwordChange(userUuid, dto);
     }
 }
