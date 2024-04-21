@@ -25,7 +25,7 @@ public class SecurityFilter extends OncePerRequestFilter {
   final UserService userService;
   final PasswordService passwordService;
   private final List<String> notSecure =
-          List.of("/notivent/auth", "/notivent/user/password/reset");
+          List.of("/notivent/auth", "/notivent/user/password/reset", "/actuator/health");
 
   @Override
   protected void doFilterInternal(
