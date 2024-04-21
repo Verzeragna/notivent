@@ -33,6 +33,7 @@ public class GeoPointService {
   final CommentService commentService;
   final SubscriptionService subscriptionService;
   final GradeLogService gradeLogService;
+  final LocationService locationService;
 
   // TODO: This setting will be made by the user in the future
   private static final int MAX_POINTS_COUNT = 1000;
@@ -46,6 +47,7 @@ public class GeoPointService {
 
   @Delegate private final GeoPointDao geoPointDao;
 
+  @Transactional
   public ResponseEntity<GeoPointDto> createGeoPoint(GeoPointDto dto, UUID userUuid) {
     if (Objects.equals(dto.getType(), GeoPointType.PUBLIC)
         && !subscriptionService.isUserHasActiveSubscription(userUuid)) {
@@ -63,6 +65,13 @@ public class GeoPointService {
     val geoPointLive = dto.getCreatedAt().plus(7, ChronoUnit.DAYS);
     geoPointModel.setLive(geoPointLive);
     geoPointModel.setUserUuid(userUuid);
+    var location = locationService.findByAddressLine(geoPointModel.getLocation().getAddressLine());
+    if (location.isPresent()) {
+      geoPointModel.getLocation().setId(location.get().getId());
+    } else {
+      var locationId = locationService.save(geoPointModel.getLocation());
+      geoPointModel.getLocation().setId(locationId);
+    }
     return ResponseEntity.ok(geoPointMapper.toDto(create(geoPointModel)));
   }
 

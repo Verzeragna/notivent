@@ -27,4 +27,5 @@ public class GeoPoint {
     Instant createdAt;
     Instant live;
     Integer grade;
+    Location location;
 }

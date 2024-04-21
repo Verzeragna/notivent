@@ -1,10 +1,9 @@
 package ru.notivent.controller;
 
-import static ru.notivent.util.HttpUtil.X_UUID;
+import static ru.notivent.util.HttpUtil.X_AUTH;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.experimental.ExtensionMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -21,12 +20,12 @@ public class TariffController {
   private final TariffService tariffService;
 
   @GetMapping("all")
-  public ResponseEntity<TariffDto> getAllTariffs(@RequestHeader(X_UUID) UUID userUuid) {
+  public ResponseEntity<TariffDto> getAllTariffs(@RequestHeader(X_AUTH) UUID userUuid) {
     return tariffService.getAllTariffs(userUuid);
   }
 
   @GetMapping("all/payment/parameters")
-  public ResponseEntity<TariffDto> getAllTariffsWithPaymentParameters(@RequestHeader(X_UUID) UUID userUuid) {
+  public ResponseEntity<TariffDto> getAllTariffsWithPaymentParameters(@RequestHeader(X_AUTH) UUID userUuid) {
     return tariffService.getAllTariffsWithPaymentParameters(userUuid);
   }
 }

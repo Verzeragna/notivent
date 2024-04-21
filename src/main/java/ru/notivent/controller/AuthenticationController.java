@@ -1,5 +1,6 @@
 package ru.notivent.controller;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping
-    public ResponseEntity<UUID> authRegister(@RequestBody AuthDto authDto) {
+    public ResponseEntity<UUID> authRegister(@Valid @RequestBody AuthDto authDto) {
         return authenticationService.authRegister(authDto);
     }
 }

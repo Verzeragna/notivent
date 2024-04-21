@@ -1,6 +1,6 @@
 package ru.notivent.controller;
 
-import static ru.notivent.util.HttpUtil.X_UUID;
+import static ru.notivent.util.HttpUtil.X_AUTH;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -22,12 +22,12 @@ public class UserController {
     final UserService userService;
 
     @GetMapping("nickName")
-    public ResponseEntity<String> getNickName(@RequestHeader(X_UUID) UUID userUuid) {
+    public ResponseEntity<String> getNickName(@RequestHeader(X_AUTH) UUID userUuid) {
         return ResponseEntity.ok(userService.getNickName(userUuid));
     }
 
     @PostMapping("nickName")
-    public ResponseEntity<Void> setNickName(@RequestHeader(X_UUID) UUID userUuid, @RequestBody String userName) {
+    public ResponseEntity<Void> setNickName(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody String userName) {
         userService.setNickName(userUuid, userName);
         return ResponseEntity.ok().build();
     }
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @PostMapping("password/change")
-    public ResponseEntity<Void> passwordChange(@RequestHeader(X_UUID) UUID userUuid, @RequestBody PasswordChangeDto dto) {
+    public ResponseEntity<Void> passwordChange(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody PasswordChangeDto dto) {
         return userService.passwordChange(userUuid, dto);
     }
 }

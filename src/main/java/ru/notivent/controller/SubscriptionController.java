@@ -1,7 +1,6 @@
 package ru.notivent.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.experimental.ExtensionMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,13 +25,13 @@ public class SubscriptionController {
     private final SubscriptionService subscriptionService;
 
     @PostMapping("subscribe")
-    public ResponseEntity<Void> subscribe(@RequestHeader(X_UUID) UUID userUuid, @RequestBody TariffDto dto) {
+    public ResponseEntity<Void> subscribe(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody TariffDto dto) {
         subscriptionService.subscribe(userUuid, dto);
         return ok().build();
     }
 
     @GetMapping
-    public ResponseEntity<UserSubscriptionDto> findUserSubscription(@RequestHeader(X_UUID) UUID userUuid) {
+    public ResponseEntity<UserSubscriptionDto> findUserSubscription(@RequestHeader(X_AUTH) UUID userUuid) {
         return subscriptionService.findUserSubscription(userUuid);
     }
 }

@@ -1,6 +1,6 @@
 package ru.notivent.controller;
 
-import static ru.notivent.util.HttpUtil.X_UUID;
+import static ru.notivent.util.HttpUtil.X_AUTH;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class NotificationController {
     final NotificationService notificationService;
 
     @GetMapping
-    public ResponseEntity<String> getNotification(@RequestHeader(X_UUID) UUID userUuid) {
+    public ResponseEntity<String> getNotification(@RequestHeader(X_AUTH) UUID userUuid) {
         return notificationService.getNotification(userUuid);
     }
 }
