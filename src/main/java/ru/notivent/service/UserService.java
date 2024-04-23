@@ -25,9 +25,17 @@ public class UserService {
     return "";
   }
 
-  public void setNickName(UUID userUuid, String userName) {
+  public ResponseEntity<Void> setNickName(UUID userUuid, String nickName) {
     var user = userDao.findById(userUuid);
-    user.ifPresent(u -> userDao.updateNickNameById(userUuid, userName));
+    if (user.isPresent()) {
+      var userWithCurrentNickName = userDao.findByNickName(nickName);
+      if (userWithCurrentNickName.isPresent() && !userWithCurrentNickName.get().getUuid().equals(user.get().getUuid())) {
+        return new ResponseEntity<>(HttpStatus.CONFLICT);
+      }
+      user.ifPresent(u -> userDao.updateNickNameById(userUuid, nickName));
+      return ResponseEntity.ok().build();
+    }
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   public ResponseEntity<Void> passwordReset(String email) {

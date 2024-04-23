@@ -16,6 +16,8 @@ public interface UserDao {
 
     Optional<User> findByUserName(@Param("userName") String userName);
 
+    Optional<User> findByNickName(@Param("nickName") String nickName);
+
     void updateUserPassword(@Param("uuid") UUID uuid, @Param("password") String password);
 
     void updateNickNameById(@Param("uuid") UUID uuid, @Param("nickName") String nickName);
