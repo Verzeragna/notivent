@@ -22,6 +22,12 @@
         WHERE user_name = #{userName}
     </select>
 
+    <select id="findByNickName" resultType="ru.notivent.model.User">
+        SELECT *
+        FROM mvp.user
+        WHERE nick_name = #{nickName}
+    </select>
+
     <update id="updateUserPassword">
         UPDATE mvp.user
         SET password = #{password}

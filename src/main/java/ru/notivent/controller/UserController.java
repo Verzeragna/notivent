@@ -30,8 +30,7 @@ public class UserController {
 
     @PostMapping("nickName")
     public ResponseEntity<Void> setNickName(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody String userName) {
-        userService.setNickName(userUuid, userName);
-        return ResponseEntity.ok().build();
+        return userService.setNickName(userUuid, userName);
     }
 
     @PostMapping("password/reset")
