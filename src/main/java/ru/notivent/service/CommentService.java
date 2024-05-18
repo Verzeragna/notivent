@@ -9,7 +9,7 @@ import lombok.experimental.Delegate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.notivent.dao.CommentDao;
-import ru.notivent.dao.CommentPostDto;
+import ru.notivent.dto.CommentPostDto;
 import ru.notivent.dto.CommentDto;
 import ru.notivent.mapper.CommentMapper;
 import ru.notivent.model.Comment;
