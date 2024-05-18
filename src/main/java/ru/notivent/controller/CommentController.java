@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.notivent.dao.CommentPostDto;
+import ru.notivent.dto.CommentPostDto;
 import ru.notivent.dto.CommentDto;
 import ru.notivent.service.CommentService;
 

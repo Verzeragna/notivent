@@ -1,4 +1,4 @@
-package ru.notivent.dao;
+package ru.notivent.dto;
 
 import java.util.UUID;
 
