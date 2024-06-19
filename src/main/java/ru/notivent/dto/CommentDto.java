@@ -12,7 +12,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class CommentDto {
     UUID uuid;
-    String nickName;
+    String userName;
     String text;
     Instant createdAt;
 }

@@ -10,7 +10,7 @@
         <result column="com_created_at" property="createdAt"/>
         <association property="user" javaType="ru.notivent.model.User">
             <result column="user_uuid" property="uuid"/>
-            <result column="user_nick_name" property="nickName"/>
+            <result column="user_name" property="userName"/>
         </association>
         <association property="geoPoint" javaType="ru.notivent.model.GeoPoint">
             <result column="p_uuid" property="uuid"/>
@@ -23,7 +23,7 @@
             c.text AS com_text,
             c.created_at AS com_created_at,
             u.uuid AS user_uuid,
-            u.nick_name AS user_nick_name,
+            u.user_name AS user_name,
             gp.uuid AS p_uuid
         FROM mvp.geo_point_comments c
         JOIN mvp.user u ON c.user_uuid = u.uuid

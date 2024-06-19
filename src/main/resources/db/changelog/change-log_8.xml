@@ -10,7 +10,7 @@ http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="8" author="Sergei Andreev">
         <addColumn tableName="user">
-            <column name="nick_name" type="varchar(250)" defaultValue="Unknown">
+            <column name="user_name" type="varchar(250)" defaultValue="Unknown">
                 <constraints nullable="false"/>
             </column>
         </addColumn>

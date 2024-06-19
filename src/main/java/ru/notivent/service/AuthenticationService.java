@@ -1,6 +1,5 @@
 package ru.notivent.service;
 
-import java.util.Objects;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,7 @@ public class AuthenticationService {
   final PasswordService passwordService;
 
   public ResponseEntity<UUID> authRegister(AuthDto dto) {
-    var userOpt = userService.findByUserName(dto.getUserName());
+    var userOpt = userService.findByLogin(dto.getLogin());
     if (userOpt.isEmpty()) {
       var newUser = createUser(dto);
       return ResponseEntity.ok(newUser.getUuid());
@@ -32,9 +31,9 @@ public class AuthenticationService {
   }
 
   private User createUser(AuthDto dto) {
-    dto.setUserName(passwordService.decodeBase64(dto.getUserName()));
+    dto.setLogin(passwordService.decodeBase64(dto.getLogin()));
     dto.setPassword(passwordService.encrypt(passwordService.decodeBase64(dto.getPassword())));
-    var newUser = User.builder().userName(dto.getUserName()).password(dto.getPassword()).build();
+    var newUser = User.builder().login(dto.getLogin()).password(dto.getPassword()).build();
     return userService.create(newUser);
   }
 

@@ -23,19 +23,19 @@ import ru.notivent.service.UserService;
 public class UserController {
     final UserService userService;
 
-    @GetMapping("nickName")
-    public ResponseEntity<String> getNickName(@RequestHeader(X_AUTH) UUID userUuid) {
-        return ResponseEntity.ok(userService.getNickName(userUuid));
+    @GetMapping("name")
+    public ResponseEntity<String> getUserName(@RequestHeader(X_AUTH) UUID userUuid) {
+        return ResponseEntity.ok(userService.getUserName(userUuid));
     }
 
-    @PostMapping("nickName")
-    public ResponseEntity<Void> setNickName(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody String userName) {
-        return userService.setNickName(userUuid, userName);
+    @PostMapping("name")
+    public ResponseEntity<Void> setUserName(@RequestHeader(X_AUTH) UUID userUuid, @RequestBody String userName) {
+        return userService.setUserName(userUuid, userName);
     }
 
     @PostMapping("password/reset")
     public ResponseEntity<Void> passwordReset(@RequestBody PasswordResetDto dto) {
-        return userService.passwordReset(dto.getEmail());
+        return userService.passwordReset(dto.getLogin());
     }
 
     @PostMapping("password/change")
