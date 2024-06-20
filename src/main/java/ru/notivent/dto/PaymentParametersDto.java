@@ -11,7 +11,6 @@ import java.util.UUID;
 @AllArgsConstructor
 public class PaymentParametersDto {
     UUID uuid;
-    String clientApplicationKey;
-    String shopId;
-    String authCenterClientId;
+    String terminalKey;
+    String publicKey;
 }
