@@ -59,7 +59,7 @@ public class UserService {
     }
     var user = userOpt.get();
     var oldPassword = passwordService.decodeBase64(dto.getOldPassword());
-    if (passwordService.matches(oldPassword, user.getPassword())) {
+    if (passwordService.matches(oldPassword, passwordService.decodeBase64(user.getPassword()))) {
       var encryptedPassword = passwordService.encrypt(oldPassword);
       updateUserPassword(user.getUuid(), encryptedPassword);
       return ResponseEntity.ok().build();

@@ -18,7 +18,7 @@ public class AuthenticationService {
   final PasswordService passwordService;
 
   public ResponseEntity<UUID> authRegister(AuthDto dto) {
-    var userOpt = userService.findByLogin(dto.getLogin());
+    var userOpt = userService.findByLogin(passwordService.decodeBase64(dto.getLogin()));
     if (userOpt.isEmpty()) {
       var newUser = createUser(dto);
       return ResponseEntity.ok(newUser.getUuid());
