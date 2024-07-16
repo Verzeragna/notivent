@@ -14,11 +14,11 @@ public interface UserDao {
 
     Optional<User> findById(@Param("uuid") UUID uuid);
 
-    Optional<User> findByUserName(@Param("userName") String userName);
+    Optional<User> findByLogin(@Param("login") String login);
 
-    Optional<User> findByNickName(@Param("nickName") String nickName);
+    Optional<User> findByUserName(@Param("userName") String userName);
 
     void updateUserPassword(@Param("uuid") UUID uuid, @Param("password") String password);
 
-    void updateNickNameById(@Param("uuid") UUID uuid, @Param("nickName") String nickName);
+    void updateUserNameById(@Param("uuid") UUID uuid, @Param("userName") String userName);
 }

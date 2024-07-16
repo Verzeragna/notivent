@@ -14,8 +14,8 @@ import java.util.UUID;
 @Builder
 public class User {
     UUID uuid;
-    String userName;
+    String login;
     String password;
     Instant createdAt;
-    String nickName;
+    String userName;
 }

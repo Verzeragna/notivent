@@ -25,7 +25,7 @@ public class SecurityFilter extends OncePerRequestFilter {
   final UserService userService;
   final PasswordService passwordService;
   private final List<String> notSecure =
-          List.of("/notivent/auth", "/notivent/user/password/reset", "/actuator/health");
+          List.of("/notivent/auth", "/notivent/endpoint/get/all" , "/notivent/user/password/reset", "/actuator/health");
 
   @Override
   protected void doFilterInternal(
@@ -54,8 +54,7 @@ public class SecurityFilter extends OncePerRequestFilter {
   private UUID getUserId(HttpServletRequest request) {
     val bearer = request.getHeader(HttpUtil.X_AUTH);
     if (StringUtils.hasText(bearer)) {
-      val userId = passwordService.decodeBase64(bearer);
-      return UUID.fromString(userId);
+      return UUID.fromString(bearer);
     }
     return null;
   }

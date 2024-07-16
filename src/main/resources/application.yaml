@@ -29,8 +29,8 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
   mail:
     host: smtp.mail.ru
-    username: notivent@mail.ru
-    password: TFzvVBDVs5ggbMg28mvU
+    username: tvoya.metka-robot@mail.ru
+    password: zsFt1TugGb2HhaK179wE
     properties:
       mail:
         transport:

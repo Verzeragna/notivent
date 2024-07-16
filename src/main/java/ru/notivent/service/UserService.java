@@ -17,29 +17,29 @@ public class UserService {
   final EmailService emailService;
   final PasswordService passwordService;
 
-  public String getNickName(UUID userUuid) {
+  public String getUserName(UUID userUuid) {
     var user = userDao.findById(userUuid);
     if (user.isPresent()) {
-      return user.get().getNickName();
+      return user.get().getUserName();
     }
     return "";
   }
 
-  public ResponseEntity<Void> setNickName(UUID userUuid, String nickName) {
+  public ResponseEntity<Void> setUserName(UUID userUuid, String userName) {
     var user = userDao.findById(userUuid);
     if (user.isPresent()) {
-      var userWithCurrentNickName = userDao.findByNickName(nickName);
-      if (userWithCurrentNickName.isPresent() && !userWithCurrentNickName.get().getUuid().equals(user.get().getUuid())) {
+      var userWithCurrentUserName = userDao.findByUserName(userName);
+      if (userWithCurrentUserName.isPresent() && !userWithCurrentUserName.get().getUuid().equals(user.get().getUuid())) {
         return new ResponseEntity<>(HttpStatus.CONFLICT);
       }
-      user.ifPresent(u -> userDao.updateNickNameById(userUuid, nickName));
+      user.ifPresent(u -> userDao.updateUserNameById(userUuid, userName));
       return ResponseEntity.ok().build();
     }
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   public ResponseEntity<Void> passwordReset(String email) {
-    var userOpt = findByUserName(email);
+    var userOpt = findByLogin(email);
     if (userOpt.isPresent()) {
       var user = userOpt.get();
       var newPassword = passwordService.generatePassword();
@@ -59,7 +59,7 @@ public class UserService {
     }
     var user = userOpt.get();
     var oldPassword = passwordService.decodeBase64(dto.getOldPassword());
-    if (passwordService.matches(oldPassword, user.getPassword())) {
+    if (passwordService.matches(oldPassword, passwordService.decodeBase64(user.getPassword()))) {
       var encryptedPassword = passwordService.encrypt(oldPassword);
       updateUserPassword(user.getUuid(), encryptedPassword);
       return ResponseEntity.ok().build();

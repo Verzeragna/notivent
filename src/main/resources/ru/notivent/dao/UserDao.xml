@@ -5,8 +5,8 @@
 <mapper namespace="ru.notivent.dao.UserDao">
 
     <select id="create" parameterType="map" resultType="ru.notivent.model.User">
-        INSERT INTO mvp.user(user_name,password,created_at)
-        VALUES(#{entity.userName},#{entity.password},now())
+        INSERT INTO mvp.user(login,password,created_at)
+        VALUES(#{entity.login},#{entity.password},now())
         RETURNING *
     </select>
 
@@ -16,16 +16,16 @@
         WHERE uuid = #{uuid}::uuid
     </select>
 
+    <select id="findByLogin" resultType="ru.notivent.model.User">
+        SELECT *
+        FROM mvp.user
+        WHERE login = #{login}
+    </select>
+
     <select id="findByUserName" resultType="ru.notivent.model.User">
         SELECT *
         FROM mvp.user
         WHERE user_name = #{userName}
-    </select>
-
-    <select id="findByNickName" resultType="ru.notivent.model.User">
-        SELECT *
-        FROM mvp.user
-        WHERE nick_name = #{nickName}
     </select>
 
     <update id="updateUserPassword">
@@ -34,9 +34,9 @@
         WHERE uuid = #{uuid}::uuid
     </update>
 
-    <update id="updateNickNameById">
+    <update id="updateUserNameById">
         UPDATE mvp.user
-        SET nick_name = #{nickName}
+        SET user_name = #{userName}
         WHERE uuid = #{uuid}::uuid
     </update>
 

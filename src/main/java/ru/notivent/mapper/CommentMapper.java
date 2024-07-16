@@ -8,6 +8,6 @@ import ru.notivent.model.Comment;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
 
-    @Mapping(source = "comment.user.nickName", target = "nickName")
+    @Mapping(source = "comment.user.userName", target = "userName")
     CommentDto toDto(Comment comment);
 }
