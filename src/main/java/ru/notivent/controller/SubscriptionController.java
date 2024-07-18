@@ -2,6 +2,7 @@ package ru.notivent.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +21,7 @@ import static ru.notivent.util.HttpUtil.*;
 
 @RestController
 @RequestMapping("subscription")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;

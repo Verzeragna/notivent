@@ -9,31 +9,20 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="5" author="Sergei Andreev">
-        <sql>DROP TYPE IF EXISTS mvp.tariff_type</sql>
-        <sql>CREATE TYPE mvp.tariff_type AS ENUM ('YEAR')</sql>
-        <createTable tableName="tariff" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
+        <sql>DROP TYPE IF EXISTS mvp.notify_status</sql>
+        <sql>CREATE TYPE mvp.notify_status AS ENUM ('ACTIVE', 'INACTIVE')</sql>
+        <createTable tableName="notification" schemaName="mvp">
+            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="message" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="type" type="mvp.tariff_type">
+            <column name="status" type="mvp.notify_status">
                 <constraints nullable="false"/>
             </column>
-            <column name="price" type="numeric(5,2)">
+            <column name="created_at" type="timestamp" defaultValue="now()">
                 <constraints nullable="false"/>
-            </column>
-        </createTable>
-        <createTable tableName="subscription" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
-                <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="tariff_uuid" type="uuid">
-                <constraints foreignKeyName="tariff_uuid_fk" referencedTableName="tariff" referencedColumnNames="uuid" nullable="false"/>
-            </column>
-            <column name="user_uuid" type="uuid">
-                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false"/>
             </column>
             <column name="end_at" type="timestamp">
                 <constraints nullable="false"/>

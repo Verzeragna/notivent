@@ -2,6 +2,7 @@ package ru.notivent.controller;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.ExtensionMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,7 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("auth")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

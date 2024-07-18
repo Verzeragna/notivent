@@ -9,26 +9,11 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="13" author="Sergei Andreev">
-        <createIndex indexName="ix_uuid_user_name" tableName="user">
-            <column name="uuid"/>
-            <column name="user_name"/>
-        </createIndex>
-        <createIndex indexName="ix_uuid_user_uuid" tableName="geo_point">
-            <column name="uuid"/>
-            <column name="user_uuid"/>
-        </createIndex>
-        <createIndex indexName="ix_uuid_geo_point_uuid" tableName="geo_point_comments">
-            <column name="uuid"/>
-            <column name="geo_point_uuid"/>
-        </createIndex>
-        <createIndex indexName="ix_tariff" tableName="subscription">
-            <column name="uuid"/>
-            <column name="tariff_uuid"/>
-        </createIndex>
-        <createIndex indexName="ix_tariff_user" tableName="subscription">
-            <column name="uuid"/>
-            <column name="tariff_uuid"/>
-            <column name="user_uuid"/>
-        </createIndex>
+        <insert tableName="tariff" schemaName="mvp">
+            <column name="name" value="Годовой (основной)"/>
+            <column name="type" value="YEAR"/>
+            <column name="price" value="100"/>
+            <column name="subtitle" value="Основной тариф"/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

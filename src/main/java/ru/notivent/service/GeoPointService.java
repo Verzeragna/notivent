@@ -4,6 +4,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -24,7 +25,7 @@ import ru.notivent.model.GradeLog;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class GeoPointService {
 
   final GeoPointMapper geoPointMapper;

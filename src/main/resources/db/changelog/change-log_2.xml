@@ -12,11 +12,11 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
         <sql>DROP TYPE IF EXISTS mvp.geo_point_type</sql>
         <sql>CREATE TYPE mvp.geo_point_type AS ENUM ('PRIVATE', 'PUBLIC')</sql>
         <createTable tableName="geo_point" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_uuid" type="uuid">
-                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false"/>
+                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false" referencedTableSchemaName="mvp"/>
             </column>
             <column name="latitude" type="numeric(35,25)">
                 <constraints nullable="false"/>
@@ -41,11 +41,11 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
             </column>
         </createTable>
         <createTable tableName="geo_point_history" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_uuid" type="uuid">
-                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false"/>
+                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false" referencedTableSchemaName="mvp"/>
             </column>
             <column name="latitude" type="numeric(35,25)">
                 <constraints nullable="false"/>
@@ -63,6 +63,9 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="live" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>
