@@ -2,6 +2,7 @@ package ru.notivent.service;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,7 @@ import ru.notivent.dao.UserDao;
 import ru.notivent.dto.PasswordChangeDto;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
   @Delegate final UserDao userDao;

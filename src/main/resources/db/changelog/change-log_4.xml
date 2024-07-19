@@ -9,35 +9,33 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="4" author="Sergei Andreev">
-        <createTable tableName="geo_point_history" schemaName="mvp">
-            <column name="uuid" type="uuid">
-                <constraints nullable="false"/>
-            </column>
-            <column name="user_uuid" type="uuid">
-                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false"/>
-            </column>
-            <column name="latitude" type="numeric(35,25)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="longitude" type="numeric(35,25)">
-                <constraints nullable="false"/>
+        <sql>DROP TYPE IF EXISTS mvp.tariff_type</sql>
+        <sql>CREATE TYPE mvp.tariff_type AS ENUM ('YEAR')</sql>
+        <createTable tableName="tariff" schemaName="mvp">
+            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="description" type="varchar(255)">
+            <column name="type" type="mvp.tariff_type">
                 <constraints nullable="false"/>
             </column>
-            <column name="type" type="mvp.geo_point_type">
+            <column name="price" type="numeric(5,2)">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_at" type="timestamp">
-                <constraints nullable="false"/>
+        </createTable>
+        <createTable tableName="subscription" schemaName="mvp">
+            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
+                <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="live" type="timestamp">
-                <constraints nullable="false"/>
+            <column name="tariff_uuid" type="uuid">
+                <constraints foreignKeyName="tariff_uuid_fk" referencedTableName="tariff" referencedColumnNames="uuid" nullable="false" referencedTableSchemaName="mvp"/>
             </column>
-            <column name="point" type="geometry(Point, 4326)">
+            <column name="user_uuid" type="uuid">
+                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false" referencedTableSchemaName="mvp"/>
+            </column>
+            <column name="end_at" type="timestamp">
                 <constraints nullable="false"/>
             </column>
         </createTable>

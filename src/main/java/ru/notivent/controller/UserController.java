@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ import ru.notivent.service.UserService;
 
 @RestController
 @RequestMapping("user")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserController {
     final UserService userService;
 

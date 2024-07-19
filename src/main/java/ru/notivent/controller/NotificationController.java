@@ -4,6 +4,7 @@ import static ru.notivent.util.HttpUtil.X_AUTH;
 
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -13,7 +14,7 @@ import ru.notivent.service.NotificationService;
 
 @RestController
 @RequestMapping("notification")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class NotificationController {
 
     final NotificationService notificationService;

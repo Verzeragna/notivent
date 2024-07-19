@@ -9,32 +9,25 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="7" author="Sergei Andreev">
-        <sql>DROP TYPE IF EXISTS mvp.grade_type</sql>
-        <sql>CREATE TYPE mvp.grade_type AS ENUM ('PLUS', 'MINUS')</sql>
-        <addColumn tableName="geo_point">
-            <column name="grade" type="numeric(5)" defaultValue="0">
+        <addColumn tableName="user" schemaName="mvp">
+            <column name="user_name" type="varchar(250)" defaultValue="Unknown">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
-        <addColumn tableName="geo_point_history">
-            <column name="grade" type="numeric(5)">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-        <createTable tableName="grade_log" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
+        <createTable tableName="geo_point_comments" schemaName="mvp">
+            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_uuid" type="uuid">
-                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false"/>
-            </column>
-            <column name="grade_type" type="grade_type">
-                <constraints nullable="false"/>
+                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false" referencedTableSchemaName="mvp"/>
             </column>
             <column name="geo_point_uuid" type="uuid">
-                <constraints foreignKeyName="geo_point_uuid_fk" referencedTableName="geo_point" referencedColumnNames="uuid" nullable="false"/>
+                <constraints foreignKeyName="geo_point_uuid_fk" referencedTableName="geo_point" referencedColumnNames="uuid" nullable="false" referencedTableSchemaName="mvp"/>
             </column>
-            <column name="date" type="timestamp" defaultValue="now()">
+            <column name="text" type="varchar(250)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp" defaultValue="now()">
                 <constraints nullable="false"/>
             </column>
         </createTable>

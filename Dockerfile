@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:21
 EXPOSE 8010
 ARG JAR_FILE=target/*.jar
 WORKDIR /opt/app

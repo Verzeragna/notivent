@@ -9,9 +9,10 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="1" author="Sergei Andreev">
+        <sql>CREATE SCHEMA IF NOT EXISTS mvp</sql>
         <sql>CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA mvp</sql>
         <createTable tableName="user" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="login" type="varchar(255)">
