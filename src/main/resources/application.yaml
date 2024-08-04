@@ -23,20 +23,20 @@ spring:
   datasource:
     jdbcurl: jdbc:postgresql://localhost:5432/notivent?currentSchema=mvp
     driver-class-name: org.postgresql.Driver
-    username: postgressss
-    password: 05konrad05
+    username:
+    password:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
   mail:
     host: smtp.mail.ru
     username: tvoya.metka-robot@mail.ru
-    password: zsFt1TugGb2HhaK179wE
+    password:
     properties:
       mail:
         transport:
           protocol: smtp
         smtp:
-          port: 25
+          port: 2525
           auth: true
           starttls:
             enable: true

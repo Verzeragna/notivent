@@ -11,12 +11,12 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
     <changeSet id="3" author="Sergei Andreev">
         <sql>CREATE EXTENSION IF NOT EXISTS "postgis" SCHEMA mvp</sql>
         <addColumn tableName="geo_point" schemaName="mvp">
-            <column name="point" type="geometry(Point, 4326)">
+            <column name="point" type="public.geometry(Point, 4326)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
         <addColumn tableName="geo_point_history" schemaName="mvp">
-            <column name="point" type="geometry(Point, 4326)">
+            <column name="point" type="public.geometry(Point, 4326)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>

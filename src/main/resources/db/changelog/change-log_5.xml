@@ -12,7 +12,7 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
         <sql>DROP TYPE IF EXISTS mvp.notify_status</sql>
         <sql>CREATE TYPE mvp.notify_status AS ENUM ('ACTIVE', 'INACTIVE')</sql>
         <createTable tableName="notification" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="message" type="varchar(255)">

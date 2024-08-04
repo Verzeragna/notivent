@@ -31,7 +31,7 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
             'CHANGE_USER_PASSWORD' )
         </sql>
         <createTable tableName="endpoint" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="mvp.endpoint_name">
