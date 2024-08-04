@@ -12,7 +12,7 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
         <sql>DROP TYPE IF EXISTS mvp.tariff_type</sql>
         <sql>CREATE TYPE mvp.tariff_type AS ENUM ('YEAR')</sql>
         <createTable tableName="tariff" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
@@ -26,7 +26,7 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
             </column>
         </createTable>
         <createTable tableName="subscription" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="tariff_uuid" type="uuid">

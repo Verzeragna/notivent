@@ -10,7 +10,7 @@ http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="11" author="Sergei Andreev">
         <createTable tableName="location" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="postal_code" type="varchar(255)">

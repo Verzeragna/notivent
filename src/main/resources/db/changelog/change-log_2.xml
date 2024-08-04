@@ -12,7 +12,7 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
         <sql>DROP TYPE IF EXISTS mvp.geo_point_type</sql>
         <sql>CREATE TYPE mvp.geo_point_type AS ENUM ('PRIVATE', 'PUBLIC')</sql>
         <createTable tableName="geo_point" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_uuid" type="uuid">
@@ -41,7 +41,7 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
             </column>
         </createTable>
         <createTable tableName="geo_point_history" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="mvp.uuid_generate_v4()">
+            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_uuid" type="uuid">

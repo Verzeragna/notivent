@@ -10,10 +10,10 @@ http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="13" author="Sergei Andreev">
         <insert tableName="tariff" schemaName="mvp">
-            <column name="name" value="Годовой (основной)"/>
+            <column name="name" value="Годовой (базовый)"/>
             <column name="type" value="YEAR"/>
             <column name="price" value="100"/>
-            <column name="subtitle" value="Основной тариф"/>
+            <column name="subtitle" value="Базовый тариф"/>
         </insert>
     </changeSet>
 </databaseChangeLog>
