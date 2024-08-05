@@ -21,7 +21,7 @@
 
     <select id="findAll" resultType="ru.notivent.model.Tariff">
         SELECT *
-        FROM mvp.tariff
+        FROM tariff
     </select>
 
     <select id="findTariffWithPaymentParameters" resultMap="TariffWithPaymentParameters">
@@ -35,7 +35,7 @@
             pp.client_application_key,
             pp.shop_id,
             pp.auth_center_client_id
-        FROM mvp.tariff t
-        JOIN mvp.payment_parameters pp ON t.payment_parameters_uuid = pp.uuid
+        FROM tariff t
+        JOIN payment_parameters pp ON t.payment_parameters_uuid = pp.uuid
     </select>
 </mapper>

@@ -9,16 +9,16 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="5" author="Sergei Andreev">
-        <sql>DROP TYPE IF EXISTS mvp.notify_status</sql>
-        <sql>CREATE TYPE mvp.notify_status AS ENUM ('ACTIVE', 'INACTIVE')</sql>
-        <createTable tableName="notification" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
+        <sql>DROP TYPE IF EXISTS notify_status</sql>
+        <sql>CREATE TYPE notify_status AS ENUM ('ACTIVE', 'INACTIVE')</sql>
+        <createTable tableName="notification">
+            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="message" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="status" type="mvp.notify_status">
+            <column name="status" type="notify_status">
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="timestamp" defaultValue="now()">

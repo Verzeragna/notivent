@@ -30,16 +30,16 @@
     </resultMap>
 
     <select id="create" parameterType="map" resultType="ru.notivent.model.GeoPoint">
-        INSERT INTO mvp.geo_point(user_uuid,latitude,longitude,point,name,description,type,created_at,live,user_latitude,user_longitude,location_id)
+        INSERT INTO geo_point(user_uuid,latitude,longitude,point,name,description,type,created_at,live,user_latitude,user_longitude,location_id)
         VALUES(#{entity.userUuid}::uuid,#{entity.latitude},#{entity.longitude},
         ST_SetSRID(ST_MakePoint(#{entity.longitude}, #{entity.latitude}), 4326)::geometry,
-        #{entity.name},#{entity.description},#{entity.type}::mvp.geo_point_type,#{entity.createdAt},#{entity.live},#{entity.userLatitude},#{entity.userLongitude}, #{entity.location.id})
+        #{entity.name},#{entity.description},#{entity.type}::geo_point_type,#{entity.createdAt},#{entity.live},#{entity.userLatitude},#{entity.userLongitude}, #{entity.location.id})
         RETURNING *
     </select>
 
     <delete id="deleteById">
         DELETE
-        FROM mvp.geo_point
+        FROM geo_point
         WHERE uuid = #{uuid}
     </delete>
 
@@ -65,22 +65,22 @@
             l.street,
             l.house_number,
             l.address_line
-        FROM mvp.geo_point gp
-        LEFT JOIN mvp.location l ON gp.location_id = l.uuid
+        FROM geo_point gp
+        LEFT JOIN location l ON gp.location_id = l.uuid
         WHERE gp.uuid = #{uuid}
     </select>
 
     <select id="findByUser" resultType="ru.notivent.model.GeoPoint">
         SELECT *
-        FROM mvp.geo_point
+        FROM geo_point
         WHERE user_uuid = #{userUuid}
     </select>
 
     <select id="findAllByUserAndRadius" resultType="ru.notivent.model.GeoPoint">
         SELECT *
-        FROM mvp.geo_point
+        FROM geo_point
         WHERE ST_DWithin(geography(point), ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography, #{radius})
-        AND type = 'PUBLIC'::mvp.geo_point_type
+        AND type = 'PUBLIC'::geo_point_type
         ORDER BY created_at
         LIMIT #{limit}
     </select>
@@ -92,7 +92,7 @@
     </select>
 
     <update id="updateGrade">
-        UPDATE mvp.geo_point
+        UPDATE geo_point
         SET grade = #{grade}
         WHERE uuid = #{uuid}
     </update>

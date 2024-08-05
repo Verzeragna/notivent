@@ -9,13 +9,13 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="9" author="Sergei Andreev">
-        <addColumn tableName="tariff" schemaName="mvp">
+        <addColumn tableName="tariff">
             <column name="subtitle" type="varchar(250)" defaultValue="">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
-        <createTable tableName="payment_parameters" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
+        <createTable tableName="payment_parameters">
+            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="terminal_key" type="varchar(250)">
@@ -25,9 +25,9 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <addColumn tableName="tariff" schemaName="mvp">
+        <addColumn tableName="tariff">
             <column name="payment_parameters_uuid" type="uuid">
-                <constraints foreignKeyName="payment_parameters_uuid_fk" referencedTableName="payment_parameters" referencedColumnNames="uuid" referencedTableSchemaName="mvp"/>
+                <constraints foreignKeyName="payment_parameters_uuid_fk" referencedTableName="payment_parameters" referencedColumnNames="uuid"/>
             </column>
         </addColumn>
     </changeSet>

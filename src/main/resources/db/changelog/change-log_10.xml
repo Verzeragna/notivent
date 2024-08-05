@@ -9,7 +9,7 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="10" author="Sergei Andreev">
-        <addColumn tableName="geo_point" schemaName="mvp">
+        <addColumn tableName="geo_point">
             <column name="user_latitude" type="numeric(35,25)"/>
         </addColumn>
         <addColumn tableName="geo_point">
@@ -21,12 +21,12 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
         <addColumn tableName="geo_point_history">
             <column name="user_longitude" type="numeric(35,25)"/>
         </addColumn>
-        <createTable tableName="geo_point_comments_history" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
+        <createTable tableName="geo_point_comments_history">
+            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="user_uuid" type="uuid">
-                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false" referencedTableSchemaName="mvp"/>
+                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false"/>
             </column>
             <column name="geo_point_uuid" type="uuid">
                 <constraints nullable="false"/>

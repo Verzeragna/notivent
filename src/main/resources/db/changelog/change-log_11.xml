@@ -9,8 +9,8 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="11" author="Sergei Andreev">
-        <createTable tableName="location" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
+        <createTable tableName="location">
+            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="postal_code" type="varchar(255)">
@@ -28,15 +28,15 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
             <column name="address_line" type="varchar(255)">
             </column>
         </createTable>
-        <addUniqueConstraint tableName="location" columnNames="address_line" schemaName="mvp"/>
-        <addColumn tableName="geo_point" schemaName="mvp">
+        <addUniqueConstraint tableName="location" columnNames="address_line"/>
+        <addColumn tableName="geo_point">
             <column name="location_id" type="uuid">
-                <constraints foreignKeyName="location_id_fk" referencedTableName="location" referencedColumnNames="uuid" referencedTableSchemaName="mvp"/>
+                <constraints foreignKeyName="location_id_fk" referencedTableName="location" referencedColumnNames="uuid"/>
             </column>
         </addColumn>
-        <addColumn tableName="geo_point_history" schemaName="mvp">
+        <addColumn tableName="geo_point_history">
             <column name="location_id" type="uuid">
-                <constraints foreignKeyName="location_id_fk" referencedTableName="location" referencedColumnNames="uuid" referencedTableSchemaName="mvp"/>
+                <constraints foreignKeyName="location_id_fk" referencedTableName="location" referencedColumnNames="uuid"/>
             </column>
         </addColumn>
     </changeSet>

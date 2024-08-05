@@ -9,8 +9,8 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="8" author="Sergei Andreev">
-        <sql>DROP TYPE IF EXISTS mvp.endpoint_name</sql>
-        <sql>CREATE TYPE mvp.endpoint_name AS ENUM (
+        <sql>DROP TYPE IF EXISTS endpoint_name</sql>
+        <sql>CREATE TYPE endpoint_name AS ENUM (
             'MAIN',
             'AUTH',
             'SAVE_GEO_POINT',
@@ -30,11 +30,11 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
             'RESET_USER_PASSWORD',
             'CHANGE_USER_PASSWORD' )
         </sql>
-        <createTable tableName="endpoint" schemaName="mvp">
-            <column name="uuid" type="uuid" defaultValue="public.uuid_generate_v4()">
+        <createTable tableName="endpoint">
+            <column name="uuid" type="uuid" defaultValue="uuid_generate_v4()">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="mvp.endpoint_name">
+            <column name="name" type="endpoint_name">
                 <constraints nullable="false"/>
             </column>
             <column name="endpoint" type="varchar(250)">
