@@ -1,10 +1,9 @@
-CREATE SCHEMA IF NOT EXISTS mvp;
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA mvp;
-CREATE EXTENSION IF NOT EXISTS "postgis" SCHEMA mvp;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "postgis";
 
-CREATE TABLE IF NOT EXISTS mvp."user"
+CREATE TABLE IF NOT EXISTS "user"
 (
-    uuid uuid NOT NULL DEFAULT mvp.uuid_generate_v4(),
+    uuid uuid NOT NULL DEFAULT uuid_generate_v4(),
     login character varying(255) COLLATE pg_catalog."default" NOT NULL,
     password character varying(255) COLLATE pg_catalog."default" NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -12,4 +11,4 @@ CREATE TABLE IF NOT EXISTS mvp."user"
     CONSTRAINT user_pkey PRIMARY KEY (uuid)
 );
 
-INSERT INTO mvp."user"(login,password,created_at) VALUES('test1@mail.ru', '$2a$16$.yH7bEhsOSKOHOMtxlmte.aH2u4Orll5tdywyX.IH4i4X/MuzEQxG',now());
+INSERT INTO "user"(login,password,created_at) VALUES('test1@mail.ru', '$2a$16$.yH7bEhsOSKOHOMtxlmte.aH2u4Orll5tdywyX.IH4i4X/MuzEQxG',now());

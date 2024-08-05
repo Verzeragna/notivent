@@ -17,19 +17,19 @@
         t.name,
         t.type,
         t.price
-        FROM mvp.subscription s
-        JOIN mvp.tariff t ON t.uuid = s.tariff_uuid
+        FROM subscription s
+        JOIN tariff t ON t.uuid = s.tariff_uuid
         WHERE user_uuid = #{userUuid}
     </select>
 
     <update id="updateEndAt">
-        UPDATE mvp.subscription
+        UPDATE subscription
         SET end_at = #{endAt}
         WHERE uuid = #{subscriptionUuid}
     </update>
 
     <insert id="create" parameterType="map">
-        INSERT INTO mvp.subscription(tariff_uuid,user_uuid,end_at)
+        INSERT INTO subscription(tariff_uuid,user_uuid,end_at)
         VALUES(#{entity.tariff.uuid},#{entity.userUuid},#{entity.endAt})
     </insert>
 </mapper>

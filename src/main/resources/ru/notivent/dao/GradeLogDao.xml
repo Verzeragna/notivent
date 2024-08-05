@@ -5,26 +5,26 @@
 <mapper namespace="ru.notivent.dao.GradeLogDao">
 
     <insert id="create" parameterType="map">
-        INSERT INTO mvp.grade_log(user_uuid,grade_type,geo_point_uuid)
-        VALUES(#{entity.userUuid}::uuid,#{entity.gradeType}::mvp.grade_type,#{entity.geoPointUuid})
+        INSERT INTO grade_log(user_uuid,grade_type,geo_point_uuid)
+        VALUES(#{entity.userUuid}::uuid,#{entity.gradeType}::grade_type,#{entity.geoPointUuid})
     </insert>
 
     <select id="findByGeoPointAndUser" resultType="ru.notivent.model.GradeLog">
         SELECT *
-        FROM mvp.grade_log
+        FROM grade_log
         WHERE geo_point_uuid = #{pointUuid}
         AND user_uuid = #{userUuid}::uuid
     </select>
 
     <update id="updateGradeType" parameterType="map">
-        UPDATE mvp.grade_log
-        SET grade_type = #{entity.gradeType}::mvp.grade_type,
+        UPDATE grade_log
+        SET grade_type = #{entity.gradeType}::grade_type,
             date = now()
         WHERE uuid = #{entity.uuid}
     </update>
 
     <delete id="delete" parameterType="map">
-        DELETE FROM mvp.grade_log
+        DELETE FROM grade_log
         WHERE uuid = #{entity.uuid}::uuid
     </delete>
 

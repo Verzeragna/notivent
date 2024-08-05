@@ -25,9 +25,9 @@
             u.uuid AS user_uuid,
             u.user_name AS user_name,
             gp.uuid AS p_uuid
-        FROM mvp.geo_point_comments c
-        JOIN mvp.user u ON c.user_uuid = u.uuid
-        JOIN mvp.geo_point gp ON c.geo_point_uuid = gp.uuid
+        FROM geo_point_comments c
+        JOIN "user" u ON c.user_uuid = u.uuid
+        JOIN geo_point gp ON c.geo_point_uuid = gp.uuid
         WHERE c.geo_point_uuid = #{uuid}
         ORDER BY c.created_at DESC
     </select>
@@ -35,20 +35,20 @@
     <select id="countCommentsByGeoPoint" resultType="integer">
         SELECT
             count(*) AS comments_count
-        FROM mvp.geo_point_comments c
-        JOIN mvp.user u ON c.user_uuid = u.uuid
-        JOIN mvp.geo_point gp ON c.geo_point_uuid = gp.uuid
+        FROM geo_point_comments c
+        JOIN "user" u ON c.user_uuid = u.uuid
+        JOIN geo_point gp ON c.geo_point_uuid = gp.uuid
         WHERE c.geo_point_uuid = #{uuid}
     </select>
 
     <insert id="create" parameterType="map">
-        INSERT INTO mvp.geo_point_comments(user_uuid,geo_point_uuid,text)
+        INSERT INTO geo_point_comments(user_uuid,geo_point_uuid,text)
         VALUES(#{entity.user.uuid},#{entity.geoPoint.uuid},#{entity.text})
     </insert>
 
     <delete id="delete">
         DELETE
-        FROM mvp.geo_point_comments
+        FROM geo_point_comments
         WHERE geo_point_uuid = #{uuid}
     </delete>
 </mapper>

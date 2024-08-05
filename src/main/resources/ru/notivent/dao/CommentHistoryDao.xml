@@ -5,7 +5,7 @@
 <mapper namespace="ru.notivent.dao.CommentHistoryDao">
 
    <insert id="create">
-       INSERT INTO mvp.geo_point_comments_history(user_uuid,geo_point_uuid,text)
+       INSERT INTO geo_point_comments_history(user_uuid,geo_point_uuid,text)
        <foreach collection="comments" item="entity" separator=";">
            VALUES(#{entity.user.uuid},#{entity.geoPoint.uuid},#{entity.text})
        </foreach>

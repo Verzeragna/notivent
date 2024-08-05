@@ -5,6 +5,6 @@
 <mapper namespace="ru.notivent.dao.EndpointDao">
     <select id="findAll" resultType="ru.notivent.model.Endpoint">
         SELECT *
-        FROM mvp.endpoint
+        FROM endpoint
     </select>
 </mapper>
