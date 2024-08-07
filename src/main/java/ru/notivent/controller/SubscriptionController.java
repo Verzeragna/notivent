@@ -1,39 +1,27 @@
 package ru.notivent.controller;
 
-import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import static ru.notivent.util.HttpUtil.*;
+
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import ru.notivent.dto.TariffDto;
 import ru.notivent.dto.UserSubscriptionDto;
 import ru.notivent.service.SubscriptionService;
-
-import java.util.UUID;
-
-import static org.springframework.http.ResponseEntity.*;
-import static ru.notivent.util.HttpUtil.*;
 
 @RestController
 @RequestMapping("subscription")
 @RequiredArgsConstructor
 public class SubscriptionController {
 
-    private final SubscriptionService subscriptionService;
+  private final SubscriptionService subscriptionService;
 
-    @PostMapping("subscribe")
-    public ResponseEntity<Void> subscribe(@RequestHeader(X_AUTH) UUID userUuid, @Valid @RequestBody TariffDto dto) {
-        subscriptionService.subscribe(userUuid, dto);
-        return ok().build();
-    }
-
-    @GetMapping
-    public ResponseEntity<UserSubscriptionDto> findUserSubscription(@RequestHeader(X_AUTH) UUID userUuid) {
-        return subscriptionService.findUserSubscription(userUuid);
-    }
+  @GetMapping
+  public ResponseEntity<UserSubscriptionDto> findUserSubscription(
+      @RequestHeader(X_AUTH) UUID userUuid) {
+    return subscriptionService.findUserSubscription(userUuid);
+  }
 }

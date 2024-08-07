@@ -24,9 +24,4 @@ public class TariffController {
   public ResponseEntity<TariffDto> getAllTariffs(@RequestHeader(X_AUTH) UUID userUuid) {
     return tariffService.getAllTariffs(userUuid);
   }
-
-  @GetMapping("all/payment/parameters")
-  public ResponseEntity<TariffDto> getAllTariffsWithPaymentParameters(@RequestHeader(X_AUTH) UUID userUuid) {
-    return tariffService.getAllTariffsWithPaymentParameters(userUuid);
-  }
 }

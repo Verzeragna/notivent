@@ -1,22 +1,22 @@
 package ru.notivent.model;
 
+import java.time.OffsetDateTime;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.util.UUID;
+import ru.notivent.enums.OrderStatus;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Comment {
-    UUID uuid;
-    User user;
-    GeoPoint geoPoint;
-    String text;
+public class Order {
+    Integer id;
+    UUID userId;
+    UUID subscriptionId;
+    UUID tariffId;
+    OrderStatus status;
     OffsetDateTime createdAt;
 }

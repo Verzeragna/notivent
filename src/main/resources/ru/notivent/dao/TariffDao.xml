@@ -5,37 +5,22 @@
 
 <mapper namespace="ru.notivent.dao.TariffDao">
 
-    <resultMap id="TariffWithPaymentParameters" type="ru.notivent.model.Tariff">
-        <id column="t_id" property="uuid"/>
+    <resultMap id="TariffMap" type="ru.notivent.model.Tariff">
+        <id column="uuid" property="uuid"/>
         <result column="name" property="name"/>
-        <result column="subtitle" property="subtitle"/>
         <result column="type" property="type"/>
         <result column="price" property="price"/>
-        <association property="paymentParameters" javaType="ru.notivent.model.PaymentParameters">
-            <id column="p_id" property="uuid"/>
-            <result column="client_application_key" property="clientApplicationKey"/>
-            <result column="shop_id" property="shopId"/>
-            <result column="auth_center_client_id" property="authCenterClientId"/>
-        </association>
+        <result column="subtitle" property="subtitle"/>
     </resultMap>
 
-    <select id="findAll" resultType="ru.notivent.model.Tariff">
+    <select id="findAll" resultMap="TariffMap">
         SELECT *
         FROM tariff
     </select>
 
-    <select id="findTariffWithPaymentParameters" resultMap="TariffWithPaymentParameters">
-        SELECT
-            t.uuid AS t_id,
-            t.name,
-            t.subtitle,
-            t.type,
-            t.price,
-            pp.uuid AS p_id,
-            pp.client_application_key,
-            pp.shop_id,
-            pp.auth_center_client_id
-        FROM tariff t
-        JOIN payment_parameters pp ON t.payment_parameters_uuid = pp.uuid
+    <select id="findById" resultMap="TariffMap">
+        SELECT *
+        FROM tariff
+        WHERE uuid = #{tariffId}::uuid
     </select>
 </mapper>

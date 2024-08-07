@@ -1,5 +1,6 @@
 package ru.notivent.service;
 
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import ru.notivent.dao.TariffDao;
 import ru.notivent.dto.TariffDto;
 import ru.notivent.mapper.TariffMapper;
+import ru.notivent.model.Tariff;
 
 @Slf4j
 @Service
@@ -29,14 +31,5 @@ public class TariffService {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     return ResponseEntity.ok(tariffMapper.toDto(findAll()));
-  }
-
-  public ResponseEntity<TariffDto> getAllTariffsWithPaymentParameters(UUID userUuid) {
-    val user = userService.findById(userUuid);
-    if (user.isEmpty()) {
-      log.error("User with UUID {} not found", userUuid);
-      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-    }
-    return ResponseEntity.ok(tariffMapper.toDto(findTariffWithPaymentParameters()));
   }
 }

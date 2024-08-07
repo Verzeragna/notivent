@@ -8,6 +8,7 @@ import org.locationtech.jts.geom.Point;
 import ru.notivent.enums.GeoPointType;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -24,8 +25,8 @@ public class GeoPoint {
     double userLongitude;
     String name;
     String description;
-    Instant createdAt;
-    Instant live;
+    OffsetDateTime createdAt;
+    OffsetDateTime live;
     Integer grade;
     Location location;
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.notivent.dao.OrderDao">
+
+    <resultMap id="OrderMap" type="ru.notivent.model.Order">
+        <id column="id" property="id"/>
+        <result column="user_uuid" property="userId"/>
+        <result column="subscription_uuid" property="subscriptionId"/>
+        <result column="tariff_uuid" property="tariffId"/>
+        <result column="status" property="status"/>
+    </resultMap>
+
+    <select id="create" parameterType="map" resultMap="OrderMap">
+        INSERT INTO "order"(user_uuid,tariff_uuid,status,created_at)
+        VALUES(#{entity.userId},#{entity.tariffId},#{entity.status}::order_status,#{entity.createdAt})
+        RETURNING *
+    </select>
+
+    <select id="findById" resultMap="OrderMap">
+        SELECT *
+        FROM "order"
+        WHERE id = #{orderId}
+    </select>
+
+    <update id="updateStatusById">
+        UPDATE "order"
+        SET status = #{status}::order_status,
+        updated_at = #{updatedAt}
+        WHERE id = #{orderId}
+        AND status = 'PENDING'::order_status
+    </update>
+
+</mapper>

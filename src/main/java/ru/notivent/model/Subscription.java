@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -16,5 +17,5 @@ public class Subscription {
     UUID uuid;
     Tariff tariff;
     UUID userUuid;
-    Instant endAt;
+    OffsetDateTime endAt;
 }

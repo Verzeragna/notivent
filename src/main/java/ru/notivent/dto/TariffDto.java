@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.notivent.enums.TariffType;
@@ -12,6 +13,7 @@ import ru.notivent.enums.TariffType;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class TariffDto {
     @NotNull
     UUID uuid;
@@ -19,5 +21,4 @@ public class TariffDto {
     String subtitle;
     TariffType type;
     BigDecimal price;
-    PaymentParametersDto paymentParameters;
 }
