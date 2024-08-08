@@ -9,8 +9,10 @@ http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
     <changeSet id="15" author="Sergei Andreev">
+        <sql>ALTER type endpoint_name ADD VALUE IF NOT exists 'CREATE_ORDER'</sql>
+        <sql>ALTER type endpoint_name ADD VALUE IF NOT exists 'UPDATE_ORDER'</sql>
         <sql>DROP TYPE IF EXISTS order_status</sql>
-        <sql>CREATE TYPE order_status AS ENUM ('PENDING', 'DONE', 'ERROR')</sql>
+        <sql>CREATE TYPE order_status AS ENUM ('PENDING', 'DONE', 'ERROR', 'CANCELED')</sql>
         <createTable tableName="order">
             <column name="id" type="serial" autoIncrement="true">
                 <constraints primaryKey="true"/>
