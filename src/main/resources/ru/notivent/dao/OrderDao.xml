@@ -13,8 +13,8 @@
     </resultMap>
 
     <select id="create" parameterType="map" resultMap="OrderMap">
-        INSERT INTO "order"(user_uuid,tariff_uuid,status,created_at)
-        VALUES(#{entity.userId},#{entity.tariffId},#{entity.status}::order_status,#{entity.createdAt})
+        INSERT INTO "order"(user_uuid,tariff_uuid,status,created_at,updated_at)
+        VALUES(#{entity.userId},#{entity.tariffId},#{entity.status}::order_status,#{entity.createdAt},#{entity.createdAt})
         RETURNING *
     </select>
 

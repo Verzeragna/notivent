@@ -40,7 +40,7 @@ public class SubscriptionService {
     }
   }
 
-  private void updateSubscription(Subscription subscription, OffsetDateTime subscribeDate) {
+  public void updateSubscription(Subscription subscription, OffsetDateTime subscribeDate) {
     val endAt = subscribeDate.plusYears(1);
     updateEndAt(endAt, subscription.getUuid());
   }

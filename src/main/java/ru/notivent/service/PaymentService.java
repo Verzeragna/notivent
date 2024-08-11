@@ -73,13 +73,18 @@ public class PaymentService {
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
     var order = orderOpt.get();
-    orderDao.updateStatusById(
-        order.getId(), updateOrderDto.getStatus(), updateOrderDto.getUpdatedAt());
+    orderDao.updateStatusById(order.getId(), updateOrderDto.getStatus(), updateOrderDto.getUpdatedAt());
     if (updateOrderDto.getStatus().equals(OrderStatus.DONE)) {
-      subscriptionService.subscribe(
-          userUuid,
-          TariffDto.builder().uuid(updateOrderDto.getTariffId()).build(),
-          updateOrderDto.getUpdatedAt());
+      var currentSubscriptionOpt = subscriptionService.findByUserUuid(userUuid);
+      if (currentSubscriptionOpt.isEmpty()) {
+        subscriptionService.subscribe(
+                userUuid,
+                TariffDto.builder().uuid(updateOrderDto.getTariffId()).build(),
+                updateOrderDto.getUpdatedAt());
+      } else {
+        var currentSubscription = currentSubscriptionOpt.get();
+        subscriptionService.updateSubscription(currentSubscription, currentSubscription.getEndAt());
+      }
     }
     return ResponseEntity.ok().build();
   }
