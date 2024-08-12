@@ -25,7 +25,7 @@
     <update id="updateEndAt">
         UPDATE subscription
         SET end_at = #{endAt}
-        WHERE uuid = #{subscriptionUuid}
+        WHERE uuid = #{uuid}
     </update>
 
     <insert id="create" parameterType="map">

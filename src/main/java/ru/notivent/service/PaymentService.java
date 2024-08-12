@@ -89,6 +89,7 @@ public class PaymentService {
       } else {
         var currentSubscription = currentSubscriptionOpt.get();
         subscriptionService.updateSubscription(currentSubscription, currentSubscription.getEndAt());
+        orderDao.updateSubscription(order.getId(), currentSubscription.getUuid());
       }
     }
     return ResponseEntity.ok().build();
