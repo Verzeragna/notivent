@@ -32,4 +32,10 @@
         AND status = 'PENDING'::order_status
     </update>
 
+    <update id="updateSubscription">
+        UPDATE "order"
+        SET subscription_uuid = #{subscriptionId}::uuid
+        WHERE id = #{orderId}
+    </update>
+
 </mapper>

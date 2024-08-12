@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.notivent.dao.OrderDao;
 import ru.notivent.dao.PaymentParametersDao;
 import ru.notivent.dto.CreateOrderDto;
@@ -64,6 +65,7 @@ public class PaymentService {
         .build();
   }
 
+  @Transactional
   public ResponseEntity<Void> updateOrder(UUID userUuid, UpdateOrderDto updateOrderDto) {
     var userOpt = userService.findById(userUuid);
     if (userOpt.isEmpty()) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -81,6 +83,9 @@ public class PaymentService {
                 userUuid,
                 TariffDto.builder().uuid(updateOrderDto.getTariffId()).build(),
                 updateOrderDto.getUpdatedAt());
+        var subscriptionOpt = subscriptionService.findByUserUuid(userUuid);
+        var subscription = subscriptionOpt.get();
+        orderDao.updateSubscription(order.getId(), subscription.getUuid());
       } else {
         var currentSubscription = currentSubscriptionOpt.get();
         subscriptionService.updateSubscription(currentSubscription, currentSubscription.getEndAt());
