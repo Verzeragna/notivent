@@ -1,4 +1,4 @@
-package ru.notivent.model;
+package ru.notivent.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PaymentParameters {
-    UUID uuid;
+public class PaymentDto {
+    String userEmail;
     String terminalKey;
     String publicKey;
+    OrderDto order;
 }

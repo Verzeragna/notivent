@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -16,6 +17,6 @@ public class User {
     UUID uuid;
     String login;
     String password;
-    Instant createdAt;
+    OffsetDateTime createdAt;
     String userName;
 }

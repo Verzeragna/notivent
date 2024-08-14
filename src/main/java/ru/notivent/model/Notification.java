@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import ru.notivent.enums.NotifyStatus;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Data
@@ -15,6 +16,6 @@ public class Notification {
     UUID uuid;
     String message;
     NotifyStatus status;
-    Instant createdAt;
-    Instant endAt;
+    OffsetDateTime createdAt;
+    OffsetDateTime endAt;
 }

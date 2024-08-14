@@ -38,6 +38,7 @@ public class UuidTypeHandler implements TypeHandler<UUID> {
   }
 
   private static UUID toUUID(String val) {
+    if (val == null) return null;
     if (!val.isBlank()) {
       try {
         return UUID.fromString(val);

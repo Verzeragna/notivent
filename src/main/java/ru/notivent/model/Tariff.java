@@ -16,8 +16,7 @@ import java.util.UUID;
 public class Tariff {
     UUID uuid;
     String name;
-    String subtitle;
     TariffType type;
     BigDecimal price;
-    PaymentParameters paymentParameters;
+    String subtitle;
 }

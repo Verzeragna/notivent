@@ -63,16 +63,21 @@ public class GeoPointService {
             dto.getUserLatitude());
     if (!isAcceptable) return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
     var geoPointModel = geoPointMapper.toModel(dto);
-    val geoPointLive = dto.getCreatedAt().plus(7, ChronoUnit.DAYS);
+    val geoPointLive = dto.getCreatedAt().plusDays(7);
     geoPointModel.setLive(geoPointLive);
     geoPointModel.setUserUuid(userUuid);
-    var location = locationService.findByAddressLine(geoPointModel.getLocation().getAddressLine());
-    if (location.isPresent()) {
-      geoPointModel.getLocation().setId(location.get().getId());
-    } else {
-      var locationId = locationService.save(geoPointModel.getLocation());
-      geoPointModel.getLocation().setId(locationId);
+    try {
+      var location = locationService.findByAddressLine(geoPointModel.getLocation().getAddressLine());
+      if (location.isPresent()) {
+        geoPointModel.getLocation().setId(location.get().getId());
+      } else {
+        var locationId = locationService.save(geoPointModel.getLocation());
+        geoPointModel.getLocation().setId(locationId);
+      }
+    } catch (Exception ex) {
+      log.warn("Location is empty: user {}; coordinates: {}, {}", userUuid, geoPointModel.getLatitude(), geoPointModel.getLongitude());
     }
+
     return ResponseEntity.ok(geoPointMapper.toDto(create(geoPointModel)));
   }
 

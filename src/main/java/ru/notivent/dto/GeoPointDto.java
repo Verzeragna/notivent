@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import ru.notivent.enums.GeoPointType;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,7 +22,7 @@ public class GeoPointDto {
     GeoPointType type;
     double latitude;
     double longitude;
-    Instant live;
+    OffsetDateTime live;
     double userLatitude;
     double userLongitude;
     @NotNull
@@ -29,7 +30,7 @@ public class GeoPointDto {
     @NotNull
     String description;
     @NotNull
-    Instant createdAt;
+    OffsetDateTime createdAt;
     @NotNull
     Integer grade;
     @NotNull
