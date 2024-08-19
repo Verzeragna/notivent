@@ -6,7 +6,7 @@
 
     <insert id="create" parameterType="map">
         INSERT INTO grade_log(user_uuid,grade_type,geo_point_uuid)
-        VALUES(#{entity.userUuid}::uuid,#{entity.gradeType}::grade_type,#{entity.geoPointUuid})
+        VALUES(#{entity.userUuid}::uuid,#{entity.gradeType}::grade_type,#{entity.geoPointUuid}::uuid)
     </insert>
 
     <select id="findByGeoPointAndUser" resultType="ru.notivent.model.GradeLog">
@@ -20,7 +20,7 @@
         UPDATE grade_log
         SET grade_type = #{entity.gradeType}::grade_type,
             date = now()
-        WHERE uuid = #{entity.uuid}
+        WHERE uuid = #{entity.uuid}::uuid
     </update>
 
     <delete id="delete" parameterType="map">
