@@ -4,12 +4,36 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="ru.notivent.dao.GeoPointHistoryDao">
 
-    <select id="create" parameterType="map" resultType="ru.notivent.model.GeoPoint">
+    <resultMap id="GeoPointMap" type="ru.notivent.model.GeoPointHistory">
+        <id column="p_uuid" property="uuid"/>
+        <result column="user_uuid" property="userUuid"/>
+        <result column="type" property="type"/>
+        <result column="latitude" property="latitude"/>
+        <result column="longitude" property="longitude"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="live" property="live"/>
+        <result column="grade" property="grade"/>
+        <result column="user_latitude" property="userLatitude"/>
+        <result column="user_longitude" property="userLongitude"/>
+        <association property="location" javaType="ru.notivent.model.Location">
+            <id column="l_uuid" property="id"/>
+            <result column="postal_code" property="postalCode"/>
+            <result column="country" property="country"/>
+            <result column="area" property="area"/>
+            <result column="city" property="city"/>
+            <result column="street" property="street"/>
+            <result column="house_number" property="houseNumber"/>
+            <result column="address_line" property="addressLine"/>
+        </association>
+    </resultMap>
+
+    <select id="create" parameterType="map">
         INSERT INTO geo_point_history(uuid,user_uuid,latitude,longitude,point,name,description,type,created_at,live,grade,user_latitude,user_longitude)
         VALUES(#{entity.uuid},#{entity.userUuid},#{entity.latitude},#{entity.longitude},
         ST_SetSRID(ST_MakePoint(#{entity.longitude}, #{entity.latitude}), 4326)::geometry,
         #{entity.name},#{entity.description},#{entity.type}::geo_point_type,#{entity.createdAt},#{entity.live},#{entity.grade},#{entity.userLatitude},#{entity.userLongitude})
-        RETURNING *
     </select>
 
 </mapper>

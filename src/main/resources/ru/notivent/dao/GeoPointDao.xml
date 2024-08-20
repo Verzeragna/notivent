@@ -70,9 +70,30 @@
         WHERE gp.uuid = #{uuid}
     </select>
 
-    <select id="findByUser" resultType="ru.notivent.model.GeoPoint">
-        SELECT *
-        FROM geo_point
+    <select id="findByUser" resultMap="GeoPointMap">
+        SELECT
+            gp.uuid AS p_uuid,
+            gp.user_uuid,
+            gp.type,
+            gp.latitude,
+            gp.longitude,
+            gp.name,
+            gp.description,
+            gp.created_at,
+            gp.live,
+            gp.grade,
+            gp.user_latitude,
+            gp.user_longitude,
+            l.uuid AS l_uuid,
+            l.postal_code,
+            l.country,
+            l.area,
+            l.city,
+            l.street,
+            l.house_number,
+            l.address_line
+        FROM geo_point gp
+        LEFT JOIN location l ON gp.location_id = l.uuid
         WHERE user_uuid = #{userUuid}
     </select>
 

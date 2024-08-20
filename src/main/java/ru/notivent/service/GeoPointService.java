@@ -1,9 +1,7 @@
 package ru.notivent.service;
 
-import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +16,6 @@ import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
 import ru.notivent.enums.GeoPointType;
 import ru.notivent.enums.GradeType;
-import ru.notivent.mapper.CommentMapper;
 import ru.notivent.mapper.GeoPointMapper;
 import ru.notivent.model.GeoPoint;
 import ru.notivent.model.GradeLog;
