@@ -1,12 +1,11 @@
 package ru.notivent.model;
 
+import java.time.Instant;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.notivent.enums.GeoPointType;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -21,8 +20,8 @@ public class GeoPointHistory {
     double userLongitude;
     String name;
     String description;
-    OffsetDateTime createdAt;
-    OffsetDateTime live;
+    Instant createdAt;
+    Instant live;
     Integer grade;
     Location location;
 }

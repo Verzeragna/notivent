@@ -2,7 +2,7 @@ package ru.notivent.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +23,6 @@ import ru.notivent.dto.LocationDto;
 import ru.notivent.dto.UserGeoPointDto;
 import ru.notivent.enums.GeoPointType;
 import ru.notivent.enums.GradeType;
-import ru.notivent.model.Location;
 
 @Testcontainers
 @SpringBootTest
@@ -84,7 +83,7 @@ class GeoPointServiceTest {
     geoPointDto.setUserLongitude(55.95339059829711);
     geoPointDto.setName("Поле ромашек");
     geoPointDto.setDescription("Оно реально существует!");
-    geoPointDto.setCreatedAt(OffsetDateTime.now());
+    geoPointDto.setCreatedAt(Instant.now());
     geoPointDto.setGrade(0);
 
     var result = geoPointService.createGeoPoint(geoPointDto, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"));
@@ -112,7 +111,7 @@ class GeoPointServiceTest {
     geoPointDto.setUserLongitude(55.95339059829711);
     geoPointDto.setName("Поле ромашек");
     geoPointDto.setDescription("Оно реально существует!");
-    geoPointDto.setCreatedAt(OffsetDateTime.now());
+    geoPointDto.setCreatedAt(Instant.now());
     geoPointDto.setGrade(0);
 
     var result = geoPointService.createGeoPoint(geoPointDto, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"));
@@ -140,7 +139,7 @@ class GeoPointServiceTest {
     geoPointDto.setUserLongitude(55.93339059829711);
     geoPointDto.setName("Поле ромашек");
     geoPointDto.setDescription("Оно реально существует!");
-    geoPointDto.setCreatedAt(OffsetDateTime.now());
+    geoPointDto.setCreatedAt(Instant.now());
     geoPointDto.setGrade(0);
 
     var result = geoPointService.createGeoPoint(geoPointDto, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"));

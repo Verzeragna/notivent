@@ -1,5 +1,10 @@
 package ru.notivent.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.time.Instant;
+import java.util.UUID;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,12 +21,6 @@ import ru.notivent.dto.CreateOrderDto;
 import ru.notivent.dto.UpdateOrderDto;
 import ru.notivent.enums.OrderStatus;
 import ru.notivent.model.Order;
-
-import java.time.OffsetDateTime;
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Testcontainers
 @SpringBootTest
@@ -65,7 +64,7 @@ class PaymentServiceTest {
 
     @Test
     void testCreateOrder_Tariff_Not_Found() {
-        var orderDto = new CreateOrderDto(UUID.fromString("fa9b4c8b-8e4c-4a62-a5ee-bcf87943c3af"), OffsetDateTime.now());
+        var orderDto = new CreateOrderDto(UUID.fromString("fa9b4c8b-8e4c-4a62-a5ee-bcf87943c3af"), Instant.now());
         var userId = UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900");
 
         var result = paymentService.createOrder(userId, orderDto);
@@ -75,7 +74,7 @@ class PaymentServiceTest {
 
     @Test
     void testCreateOrder_Ok() {
-        var orderDto = new CreateOrderDto(UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1"), OffsetDateTime.now());
+        var orderDto = new CreateOrderDto(UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1"), Instant.now());
         var userId = UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900");
 
         var result = paymentService.createOrder(userId, orderDto);
@@ -98,7 +97,7 @@ class PaymentServiceTest {
 
     @Test
     void testUpdateOrder_Order_Not_Found() {
-        var orderDto = new UpdateOrderDto(666, UUID.fromString("fa9b4c8b-8e4c-4a62-a5ee-bcf87943c3af"), OrderStatus.ERROR, OffsetDateTime.now());
+        var orderDto = new UpdateOrderDto(666, UUID.fromString("fa9b4c8b-8e4c-4a62-a5ee-bcf87943c3af"), OrderStatus.ERROR, Instant.now());
         var userId = UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900");
 
         var result = paymentService.updateOrder(userId, orderDto);
@@ -109,8 +108,8 @@ class PaymentServiceTest {
     @Test
     void testUpdateOrder_Ok_Status_Error() {
         var userId = UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900");
-        var order = orderDao.create(Order.builder().tariffId(UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1")).status(OrderStatus.PENDING).userId(userId).createdAt(OffsetDateTime.now()).build());
-        var orderDto = new UpdateOrderDto(order.getId(), UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1"), OrderStatus.ERROR, OffsetDateTime.now());
+        var order = orderDao.create(Order.builder().tariffId(UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1")).status(OrderStatus.PENDING).userId(userId).createdAt(Instant.now()).build());
+        var orderDto = new UpdateOrderDto(order.getId(), UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1"), OrderStatus.ERROR, Instant.now());
 
         var result = paymentService.updateOrder(userId, orderDto);
 
@@ -120,8 +119,8 @@ class PaymentServiceTest {
     @Test
     void testUpdateOrder_Ok_Status_Done() {
         var userId = UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900");
-        var order = orderDao.create(Order.builder().tariffId(UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1")).status(OrderStatus.PENDING).userId(userId).createdAt(OffsetDateTime.now()).build());
-        var orderDto = new UpdateOrderDto(order.getId(), UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1"), OrderStatus.DONE, OffsetDateTime.now());
+        var order = orderDao.create(Order.builder().tariffId(UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1")).status(OrderStatus.PENDING).userId(userId).createdAt(Instant.now()).build());
+        var orderDto = new UpdateOrderDto(order.getId(), UUID.fromString("a7b73ce0-015e-471f-9725-02b05a710ea1"), OrderStatus.DONE, Instant.now());
 
         var result = paymentService.updateOrder(userId, orderDto);
 

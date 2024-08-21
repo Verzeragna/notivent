@@ -1,15 +1,12 @@
 package ru.notivent.model;
 
+import java.time.Instant;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.locationtech.jts.geom.Point;
 import ru.notivent.enums.GeoPointType;
-
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -25,8 +22,8 @@ public class GeoPoint {
     double userLongitude;
     String name;
     String description;
-    OffsetDateTime createdAt;
-    OffsetDateTime live;
+    Instant createdAt;
+    Instant live;
     Integer grade;
     Location location;
 }

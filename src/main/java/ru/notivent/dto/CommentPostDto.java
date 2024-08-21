@@ -1,8 +1,8 @@
 package ru.notivent.dto;
 
-import java.util.UUID;
-
 import jakarta.validation.constraints.NotNull;
+import java.time.Instant;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,4 +15,6 @@ public class CommentPostDto {
     UUID geoPointUuid;
     @NotNull
     String text;
+    @NotNull
+    Instant createdAt;
 }

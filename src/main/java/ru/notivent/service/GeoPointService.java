@@ -1,5 +1,6 @@
 package ru.notivent.service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -60,7 +61,7 @@ public class GeoPointService {
             dto.getUserLatitude());
     if (!isAcceptable) return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
     var geoPointModel = geoPointMapper.toModel(dto);
-    val geoPointLive = dto.getCreatedAt().plusDays(7);
+    val geoPointLive = dto.getCreatedAt().plus(7, ChronoUnit.DAYS);
     geoPointModel.setLive(geoPointLive);
     geoPointModel.setUserUuid(userUuid);
     try {

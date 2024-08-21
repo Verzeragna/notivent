@@ -35,6 +35,7 @@ public class CommentService {
             .user(User.builder().uuid(userUuid).build())
             .geoPoint(GeoPoint.builder().uuid(dto.getGeoPointUuid()).build())
             .text(dto.getText())
+            .createdAt(dto.getCreatedAt())
             .build();
     create(comment);
     return ResponseEntity.ok().build();

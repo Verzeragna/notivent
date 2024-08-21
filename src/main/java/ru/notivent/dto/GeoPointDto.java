@@ -1,16 +1,12 @@
 package ru.notivent.dto;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import java.time.Instant;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ru.notivent.enums.GeoPointType;
-
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.util.List;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +18,7 @@ public class GeoPointDto {
     GeoPointType type;
     double latitude;
     double longitude;
-    OffsetDateTime live;
+    Instant live;
     double userLatitude;
     double userLongitude;
     @NotNull
@@ -30,7 +26,7 @@ public class GeoPointDto {
     @NotNull
     String description;
     @NotNull
-    OffsetDateTime createdAt;
+    Instant createdAt;
     @NotNull
     Integer grade;
     @NotNull

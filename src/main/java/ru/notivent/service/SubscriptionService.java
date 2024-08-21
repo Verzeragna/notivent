@@ -1,6 +1,7 @@
 package ru.notivent.service;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Delegate;
@@ -27,7 +28,7 @@ public class SubscriptionService {
 
   @Delegate private final SubscriptionDao subscriptionDao;
 
-  public void subscribe(UUID userUuid, TariffDto dto, OffsetDateTime subscribeDate) {
+  public void subscribe(UUID userUuid, TariffDto dto, Instant subscribeDate) {
     val user = userService.findById(userUuid);
     if (user.isEmpty()) {
       log.error("User with UUID {} not found", userUuid);
@@ -40,13 +41,13 @@ public class SubscriptionService {
     }
   }
 
-  public void updateSubscription(Subscription subscription, OffsetDateTime subscribeDate) {
-    val endAt = subscribeDate.plusYears(1);
+  public void updateSubscription(Subscription subscription, Instant subscribeDate) {
+    val endAt = subscribeDate.plus(1, ChronoUnit.ERAS);
     updateEndAt(endAt, subscription.getUuid());
   }
 
-  private void createSubscription(UUID userUuid, TariffDto dto, OffsetDateTime subscribeDate) {
-    val endAt = subscribeDate.plusYears(1);
+  private void createSubscription(UUID userUuid, TariffDto dto, Instant subscribeDate) {
+    val endAt = subscribeDate.plus(1, ChronoUnit.ERAS);
     var subscription =
         Subscription.builder()
             .tariff(Tariff.builder().uuid(dto.getUuid()).build())
@@ -77,6 +78,6 @@ public class SubscriptionService {
     var currentSubscription = findByUserUuid(userUuid);
     if (currentSubscription.isEmpty()) return false;
     var subscription = currentSubscription.get();
-    return subscription.getEndAt().isAfter(OffsetDateTime.now());
+    return subscription.getEndAt().isAfter(Instant.now());
   }
 }

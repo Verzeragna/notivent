@@ -1,6 +1,6 @@
 package ru.notivent.model;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,5 +18,5 @@ public class Order {
     UUID subscriptionId;
     UUID tariffId;
     OrderStatus status;
-    OffsetDateTime createdAt;
+    Instant createdAt;
 }
