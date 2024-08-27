@@ -1,6 +1,8 @@
 package ru.notivent.model;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,17 +15,18 @@ import ru.notivent.enums.GeoPointType;
 @AllArgsConstructor
 @Builder
 public class GeoPoint {
-    UUID uuid;
-    UUID userUuid;
-    GeoPointType type;
-    double latitude;
-    double longitude;
-    double userLatitude;
-    double userLongitude;
-    String name;
-    String description;
-    Instant createdAt;
-    Instant live;
-    Integer grade;
-    Location location;
+  UUID uuid;
+  UUID userUuid;
+  GeoPointType type;
+  double latitude;
+  double longitude;
+  double userLatitude;
+  double userLongitude;
+  String name;
+  String description;
+  Instant createdAt;
+  Instant live;
+  Integer grade;
+  Location location;
+  List<GeoPointImage> images = new ArrayList<>();
 }

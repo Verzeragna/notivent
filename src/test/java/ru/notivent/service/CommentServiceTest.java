@@ -12,6 +12,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import ru.notivent.dto.CommentPostDto;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -61,7 +62,7 @@ class CommentServiceTest {
 
     @Test
     void create() {
-        var commentPost = new CommentPostDto(UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"), "Nice place for chilling!!!!");
+        var commentPost = new CommentPostDto(UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"), "Nice place for chilling!!!!", Instant.now());
         commentService.create(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"), commentPost);
         var result = commentService.getComments(UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"));
         var comments = result.getBody();

@@ -12,7 +12,7 @@ import java.util.UUID;
 @Repository
 public interface GeoPointDao {
 
-  GeoPoint create(@Param("entity") GeoPoint geoPoint);
+  UUID create(@Param("entity") GeoPoint geoPoint);
 
   void deleteById(@Param("uuid") UUID uuid);
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.notivent.dto.ExistGeoPointDto;
 import ru.notivent.dto.GeoPointDto;
 import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
@@ -39,7 +40,7 @@ public class GeoPointController {
    * @return Geo point data
    */
   @PostMapping
-  public ResponseEntity<GeoPointDto> createGeoPoint(
+  public ResponseEntity<ExistGeoPointDto> createGeoPoint(
           @RequestHeader(X_AUTH) UUID userUuid, @Valid @RequestBody GeoPointDto dto) {
     return geoPointService.createGeoPoint(dto, userUuid);
   }
@@ -51,7 +52,7 @@ public class GeoPointController {
    * @return Geo point data
    */
   @GetMapping("{id}")
-  public ResponseEntity<GeoPointDto> getGeoPointById(@RequestHeader(X_AUTH) UUID userUuid, @PathVariable("id") UUID uuid) {
+  public ResponseEntity<ExistGeoPointDto> getGeoPointById(@RequestHeader(X_AUTH) UUID userUuid, @PathVariable("id") UUID uuid) {
     return geoPointService.findGeoPointById(userUuid, uuid);
   }
 

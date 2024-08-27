@@ -27,14 +27,19 @@
             <result column="house_number" property="houseNumber"/>
             <result column="address_line" property="addressLine"/>
         </association>
+        <collection property="images" javaType="java.util.List" ofType="ru.notivent.model.GeoPointImage">
+            <id column="image_id" property="id"/>
+            <result column="geo_point_id" property="geoPointId"/>
+            <result column="image_url" property="imageUrl"/>
+        </collection>
     </resultMap>
 
-    <select id="create" parameterType="map" resultType="ru.notivent.model.GeoPoint">
+    <select id="create" parameterType="map" resultType="java.util.UUID">
         INSERT INTO geo_point(user_uuid,latitude,longitude,point,name,description,type,created_at,live,user_latitude,user_longitude,location_id)
         VALUES(#{entity.userUuid}::uuid,#{entity.latitude},#{entity.longitude},
         ST_SetSRID(ST_MakePoint(#{entity.longitude}, #{entity.latitude}), 4326)::geometry,
         #{entity.name},#{entity.description},#{entity.type}::geo_point_type,#{entity.createdAt},#{entity.live},#{entity.userLatitude},#{entity.userLongitude}, #{entity.location.id})
-        RETURNING *
+        RETURNING "uuid"
     </select>
 
     <delete id="deleteById">
@@ -64,9 +69,13 @@
             l.city,
             l.street,
             l.house_number,
-            l.address_line
+            l.address_line,
+            gpi.uuid AS image_id,
+            gpi.geo_point_id,
+            gpi.image_url
         FROM geo_point gp
         LEFT JOIN location l ON gp.location_id = l.uuid
+        LEFT JOIN geo_point_image gpi ON gp.uuid = gpi.geo_point_id
         WHERE gp.uuid = #{uuid}
     </select>
 
@@ -91,9 +100,13 @@
             l.city,
             l.street,
             l.house_number,
-            l.address_line
+            l.address_line,
+            gpi.uuid AS image_id,
+            gpi.geo_point_id,
+            gpi.image_url
         FROM geo_point gp
         LEFT JOIN location l ON gp.location_id = l.uuid
+        LEFT JOIN geo_point_image gpi ON gp.uuid = gpi.geo_point_id
         WHERE user_uuid = #{userUuid}
     </select>
 

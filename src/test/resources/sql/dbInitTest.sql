@@ -101,6 +101,12 @@ CREATE TABLE public.geo_point_comments_history (
 );
 ALTER TABLE public.geo_point_comments_history ADD CONSTRAINT user_uuid_fk FOREIGN KEY (user_uuid) REFERENCES public."user"("uuid");
 
+CREATE TABLE public.geo_point_image (
+	"uuid" uuid DEFAULT uuid_generate_v4() NOT NULL,
+	geo_point_id uuid NOT NULL,
+	image_url varchar NOT NULL
+);
+
 CREATE TYPE public."tariff_type" AS ENUM (
 	'YEAR');
 

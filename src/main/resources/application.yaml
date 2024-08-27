@@ -30,7 +30,7 @@ spring:
     change-log: classpath:db/changelog/db.changelog-master.xml
   mail:
     host: smtp.mail.ru
-    username: tvoya.metka-robot@mail.ru
+    username:
     password:
     properties:
       mail:
@@ -46,3 +46,8 @@ spring:
 mybatis:
   configuration:
     call-setters-on-nulls: false
+
+yandex:
+  s3:
+    accessKeyId:
+    secretAccessKey:
