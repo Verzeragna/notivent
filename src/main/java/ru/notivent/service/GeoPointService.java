@@ -24,7 +24,7 @@ import ru.notivent.mapper.GeoPointMapper;
 import ru.notivent.model.GeoPoint;
 import ru.notivent.model.GeoPointImage;
 import ru.notivent.model.GradeLog;
-import ru.notivent.service.yandex.S3Service;
+import ru.notivent.service.yandex.s3.S3Service;
 
 @Slf4j
 @Service

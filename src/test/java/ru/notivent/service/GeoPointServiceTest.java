@@ -20,6 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.containers.localstack.LocalStackContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 import ru.notivent.dto.GeoPointDto;
@@ -27,7 +28,13 @@ import ru.notivent.dto.LocationDto;
 import ru.notivent.dto.UserGeoPointDto;
 import ru.notivent.enums.GeoPointType;
 import ru.notivent.enums.GradeType;
-import ru.notivent.service.yandex.S3Service;
+import ru.notivent.service.yandex.s3.ClientS3;
+import ru.notivent.service.yandex.s3.S3Service;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.http.SdkHttpClient;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.model.CreateBucketRequest;
 
 @Testcontainers
 @SpringBootTest
@@ -45,17 +52,29 @@ class GeoPointServiceTest {
           .withUsername("postgres")
           .withPassword("05konrad05");
 
+  static DockerImageName localstackImage = DockerImageName.parse("localstack/localstack:0.14.0");
+
+  static LocalStackContainer localStackContainer = new LocalStackContainer(localstackImage)
+          .withServices(LocalStackContainer.Service.S3);
+
+  final String ACCESS_KEY = "test";
+  final String SECRET_KEY = "test";
+  final Region region = Region.US_EAST_1;
+  private static final String IMAGES_BUCKET = "geopoint-images";
+
   @Autowired GeoPointService geoPointService;
-  @Mock S3Service s3Service;
+  @Autowired S3Service s3Service;
 
   @BeforeAll
   static void beforeAll() {
     postgres.start();
+    localStackContainer.start();
   }
 
   @AfterAll
   static void afterAll() {
     postgres.stop();
+    localStackContainer.stop();
   }
 
   @Test
@@ -127,8 +146,16 @@ class GeoPointServiceTest {
         ".jpg");
     geoPointDto.setImages(images);
 
-    when(s3Service.saveImages(images, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900")))
-        .thenReturn(List.of("http://localhost/1.jpg"));
+    var s3Client =
+        software.amazon.awssdk.services.s3.S3Client.builder()
+            .endpointOverride(localStackContainer.getEndpointOverride(LocalStackContainer.Service.S3))
+            .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(ACCESS_KEY, SECRET_KEY)))
+            .region(region)
+            .build();
+    var client = new ClientS3(s3Client);
+    var request = CreateBucketRequest.builder().bucket(IMAGES_BUCKET).build();
+    client.getClient().createBucket(request);
+    s3Service.setS3Client(client);
 
     var result =
         geoPointService.createGeoPoint(

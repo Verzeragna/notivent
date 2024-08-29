@@ -22,6 +22,8 @@ import ru.notivent.model.Tariff;
 @RequiredArgsConstructor
 public class SubscriptionService {
 
+  private static final long ONE_YEAR_SECONDS = 31536000L;
+
   private final UserService userService;
   private final TariffService tariffService;
   private final TariffMapper tariffMapper;
@@ -42,12 +44,12 @@ public class SubscriptionService {
   }
 
   public void updateSubscription(Subscription subscription, Instant subscribeDate) {
-    val endAt = subscribeDate.plus(1, ChronoUnit.ERAS);
+    val endAt = subscribeDate.plus(ONE_YEAR_SECONDS, ChronoUnit.SECONDS);
     updateEndAt(endAt, subscription.getUuid());
   }
 
   private void createSubscription(UUID userUuid, TariffDto dto, Instant subscribeDate) {
-    val endAt = subscribeDate.plus(1, ChronoUnit.ERAS);
+    val endAt = subscribeDate.plus(ONE_YEAR_SECONDS, ChronoUnit.SECONDS);
     var subscription =
         Subscription.builder()
             .tariff(Tariff.builder().uuid(dto.getUuid()).build())
