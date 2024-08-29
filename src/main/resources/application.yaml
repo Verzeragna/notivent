@@ -51,3 +51,6 @@ yandex:
   s3:
     accessKeyId:
     secretAccessKey:
+
+payment:
+  receive: true
