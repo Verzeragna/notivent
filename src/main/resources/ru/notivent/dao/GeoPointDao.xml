@@ -110,9 +110,66 @@
         WHERE user_uuid = #{userUuid}
     </select>
 
-    <select id="findAllByUserAndRadius" resultType="ru.notivent.model.GeoPoint">
-        SELECT *
-        FROM geo_point
+    <select id="findByUserAndType" resultMap="GeoPointMap">
+        SELECT
+        gp.uuid AS p_uuid,
+        gp.user_uuid,
+        gp.type,
+        gp.latitude,
+        gp.longitude,
+        gp.name,
+        gp.description,
+        gp.created_at,
+        gp.live,
+        gp.grade,
+        gp.user_latitude,
+        gp.user_longitude,
+        l.uuid AS l_uuid,
+        l.postal_code,
+        l.country,
+        l.area,
+        l.city,
+        l.street,
+        l.house_number,
+        l.address_line,
+        gpi.uuid AS image_id,
+        gpi.geo_point_id,
+        gpi.image_url
+        FROM geo_point gp
+        LEFT JOIN location l ON gp.location_id = l.uuid
+        LEFT JOIN geo_point_image gpi ON gp.uuid = gpi.geo_point_id
+        WHERE user_uuid = #{userUuid}
+        AND type = #{type}::geo_point_type
+    </select>
+
+    <select id="findAllByUserAndRadius" resultMap="GeoPointMap">
+        SELECT
+        gp.uuid AS p_uuid,
+        gp.user_uuid,
+        gp.type,
+        gp.latitude,
+        gp.longitude,
+        gp.name,
+        gp.description,
+        gp.created_at,
+        gp.live,
+        gp.grade,
+        gp.user_latitude,
+        gp.user_longitude,
+        l.uuid AS l_uuid,
+        l.postal_code,
+        l.country,
+        l.area,
+        l.city,
+        l.street,
+        l.house_number,
+        l.address_line,
+        gpi.uuid AS image_id,
+        gpi.geo_point_id,
+        gpi.image_url
+        FROM geo_point gp
+        LEFT JOIN location l ON gp.location_id = l.uuid
+        LEFT JOIN geo_point_image gpi ON gp.uuid = gpi.geo_point_id
         WHERE ST_DWithin(geography(point), ST_SetSRID(ST_MakePoint(#{longitude}, #{latitude}), 4326)::geography, #{radius})
         AND type = 'PUBLIC'::geo_point_type
         ORDER BY created_at

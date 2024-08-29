@@ -126,7 +126,7 @@ public class GeoPointService {
   }
 
   public GeoPointsDto getAllGeoPointsForUser(UserGeoPointDto dto, UUID userUuid) {
-    var privatePoints = findByUser(userUuid);
+    var privatePoints = findByUserAndType(userUuid, GeoPointType.PRIVATE);
     val publicPointsCount = MAX_POINTS_COUNT - privatePoints.size();
     var publicPoints =
         findAllByUserAndRadius(dto.getLongitude(), dto.getLatitude(), RADIUS, publicPointsCount);

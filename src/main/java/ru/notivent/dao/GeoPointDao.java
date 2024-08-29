@@ -3,6 +3,7 @@ package ru.notivent.dao;
 import org.apache.ibatis.annotations.Param;
 import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Repository;
+import ru.notivent.enums.GeoPointType;
 import ru.notivent.model.GeoPoint;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public interface GeoPointDao {
   Optional<GeoPoint> findById(@Param("uuid") UUID uuid);
 
   List<GeoPoint> findByUser(@Param("userUuid") UUID userUuid);
+
+  List<GeoPoint> findByUserAndType(@Param("userUuid") UUID userUuid, @Param("type")  GeoPointType type);
 
   List<GeoPoint> findAllByUserAndRadius(
       @Param("longitude") double longitude,
