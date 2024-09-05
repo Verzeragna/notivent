@@ -22,7 +22,7 @@ public class S3Service {
 
   private static final String IMAGES_BUCKET = "geopoint-images";
 
-  private ClientS3 s3Client;
+  private ClientS3 s3Client = new ClientS3();
 
   public List<String> saveImages(Map<String, String> images, UUID userId) {
     var urls = new ArrayList<String>();
