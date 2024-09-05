@@ -24,6 +24,7 @@ import ru.notivent.mapper.GeoPointMapper;
 import ru.notivent.model.GeoPoint;
 import ru.notivent.model.GeoPointImage;
 import ru.notivent.model.GradeLog;
+import ru.notivent.service.yandex.s3.ClientS3;
 import ru.notivent.service.yandex.s3.S3Service;
 
 @Slf4j
@@ -40,6 +41,7 @@ public class GeoPointService {
   final LocationService locationService;
   final S3Service s3Service;
   final GeoPointImageService geoPointImageService;
+  final ClientS3 clientS3;
 
   // TODO: This setting will be made by the user in the future
   private static final int MAX_POINTS_COUNT = 1000;
@@ -97,7 +99,7 @@ public class GeoPointService {
 
   private void saveGeoPointImages(Map<String, String> images, UUID userId, UUID geoPointId) {
     if (!CollectionUtils.isEmpty(images)) {
-      var imageUrls = s3Service.saveImages(images, userId);
+      var imageUrls = s3Service.saveImages(images, userId, clientS3);
       var geoPointImages =
           imageUrls.stream()
               .map(

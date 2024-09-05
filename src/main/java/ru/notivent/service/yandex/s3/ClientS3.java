@@ -1,5 +1,7 @@
 package ru.notivent.service.yandex.s3;
 
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -16,13 +18,13 @@ public class ClientS3 {
 
     private software.amazon.awssdk.services.s3.S3Client client;
 
-    @Value("${yandex.s3.accessKeyId}")
     String accessKeyId;
-
-    @Value("${yandex.s3.secretAccessKey}")
     String secretAccessKey;
 
-    public ClientS3() {
+    @Autowired
+    public ClientS3(@Value("${yandex.s3.accessKeyId}") String accessKeyId, @Value("${yandex.s3.secretAccessKey}") String secretAccessKey) {
+        this.accessKeyId = accessKeyId;
+        this.secretAccessKey = secretAccessKey;
     }
 
     public ClientS3(S3Client client) {
@@ -45,4 +47,5 @@ public class ClientS3 {
                         .build();
         return client;
     }
+
 }

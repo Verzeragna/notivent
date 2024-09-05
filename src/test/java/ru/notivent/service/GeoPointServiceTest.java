@@ -155,7 +155,6 @@ class GeoPointServiceTest {
     var client = new ClientS3(s3Client);
     var request = CreateBucketRequest.builder().bucket(IMAGES_BUCKET).build();
     client.getClient().createBucket(request);
-    s3Service.setS3Client(client);
 
     var result =
         geoPointService.createGeoPoint(
