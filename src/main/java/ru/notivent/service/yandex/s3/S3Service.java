@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -23,7 +22,6 @@ public class S3Service {
 
   public List<String> saveImages(Map<String, String> images, UUID userId, ClientS3 clientS3) {
     var urls = new ArrayList<String>();
-    var client = clientS3.getClient();
     int i = 1;
     for (Map.Entry<String, String> image : images.entrySet()) {
       var key = userId + "/" + i + image.getValue();
