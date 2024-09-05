@@ -2,7 +2,7 @@ package ru.notivent.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +23,6 @@ import ru.notivent.dto.LocationDto;
 import ru.notivent.dto.UserGeoPointDto;
 import ru.notivent.enums.GeoPointType;
 import ru.notivent.enums.GradeType;
-import ru.notivent.model.Location;
 
 @Testcontainers
 @SpringBootTest
@@ -66,7 +65,7 @@ class GeoPointServiceTest {
 
   @Test
   @Order(2)
-  void createGeoPoint_OK() {
+  void createGeoPoint_NoImages_OK() {
     var location = new LocationDto();
     location.setPostalCode("450007");
     location.setCountry("Россия");
@@ -84,16 +83,18 @@ class GeoPointServiceTest {
     geoPointDto.setUserLongitude(55.95339059829711);
     geoPointDto.setName("Поле ромашек");
     geoPointDto.setDescription("Оно реально существует!");
-    geoPointDto.setCreatedAt(OffsetDateTime.now());
+    geoPointDto.setCreatedAt(Instant.now());
     geoPointDto.setGrade(0);
 
-    var result = geoPointService.createGeoPoint(geoPointDto, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"));
+    var result =
+        geoPointService.createGeoPoint(
+            geoPointDto, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"));
 
     assertEquals(HttpStatus.OK, result.getStatusCode());
   }
 
   @Test
-  @Order(3)
+  @Order(4)
   void createGeoPoint_NOT_ACCEPTABLE() {
     var location = new LocationDto();
     location.setPostalCode("450007");
@@ -112,16 +113,18 @@ class GeoPointServiceTest {
     geoPointDto.setUserLongitude(55.95339059829711);
     geoPointDto.setName("Поле ромашек");
     geoPointDto.setDescription("Оно реально существует!");
-    geoPointDto.setCreatedAt(OffsetDateTime.now());
+    geoPointDto.setCreatedAt(Instant.now());
     geoPointDto.setGrade(0);
 
-    var result = geoPointService.createGeoPoint(geoPointDto, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"));
+    var result =
+        geoPointService.createGeoPoint(
+            geoPointDto, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"));
 
     assertEquals(HttpStatus.NOT_ACCEPTABLE, result.getStatusCode());
   }
 
   @Test
-  @Order(4)
+  @Order(5)
   void createGeoPoint_EXPECTATION_FAILED() {
     var location = new LocationDto();
     location.setPostalCode("450007");
@@ -140,83 +143,114 @@ class GeoPointServiceTest {
     geoPointDto.setUserLongitude(55.93339059829711);
     geoPointDto.setName("Поле ромашек");
     geoPointDto.setDescription("Оно реально существует!");
-    geoPointDto.setCreatedAt(OffsetDateTime.now());
+    geoPointDto.setCreatedAt(Instant.now());
     geoPointDto.setGrade(0);
 
-    var result = geoPointService.createGeoPoint(geoPointDto, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"));
+    var result =
+        geoPointService.createGeoPoint(
+            geoPointDto, UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"));
 
     assertEquals(HttpStatus.EXPECTATION_FAILED, result.getStatusCode());
   }
 
   @Test
-  @Order(5)
+  @Order(6)
   void findGeoPointById_OK() {
-    var result = geoPointService.findGeoPointById(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"), UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"));
+    var result =
+        geoPointService.findGeoPointById(
+            UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"),
+            UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"));
 
     assertEquals(HttpStatus.OK, result.getStatusCode());
   }
 
   @Test
-  @Order(6)
+  @Order(7)
   void findGeoPointById_NOT_ACCEPTABLE() {
-    var result = geoPointService.findGeoPointById(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"), UUID.fromString("a9346b4b-00c4-4438-96a6-5d6fb9bf7eb9"));
+    var result =
+        geoPointService.findGeoPointById(
+            UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"),
+            UUID.fromString("a9346b4b-00c4-4438-96a6-5d6fb9bf7eb9"));
 
     assertEquals(HttpStatus.NOT_ACCEPTABLE, result.getStatusCode());
   }
 
   @Test
-  @Order(7)
+  @Order(8)
   void findGeoPointById_BAD_REQUEST() {
-    var result = geoPointService.findGeoPointById(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"), UUID.fromString("a9346b4b-00c4-4438-96a6-4e48eb39e900"));
+    var result =
+        geoPointService.findGeoPointById(
+            UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"),
+            UUID.fromString("a9346b4b-00c4-4438-96a6-4e48eb39e900"));
 
     assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
   }
 
   @Test
-  @Order(8)
+  @Order(9)
   void isGeoPointBelongUser_TRUE() {
-    var result = geoPointService.isGeoPointBelongUser(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"), UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"));
+    var result =
+        geoPointService.isGeoPointBelongUser(
+            UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"),
+            UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"));
 
     assertTrue(result);
   }
 
   @Test
-  @Order(9)
+  @Order(10)
   void isGeoPointBelongUser_FALSE() {
-    var result = geoPointService.isGeoPointBelongUser(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e911"), UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"));
+    var result =
+        geoPointService.isGeoPointBelongUser(
+            UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e911"),
+            UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"));
 
     assertFalse(result);
   }
 
   @Test
-  @Order(10)
+  @Order(11)
   void setGeoPointGrade_PLUS() {
-    var result = geoPointService.setGeoPointGrade(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"), UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"), GradeType.PLUS);
+    var result =
+        geoPointService.setGeoPointGrade(
+            UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"),
+            UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"),
+            GradeType.PLUS);
 
     assertEquals(1, result.getBody());
   }
 
   @Test
-  @Order(11)
+  @Order(12)
   void setGeoPointGrade_MINUS() {
-    var result = geoPointService.setGeoPointGrade(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"), UUID.fromString("a9346b4b-00c4-4438-96a6-5d6fb9bf7eb9"), GradeType.MINUS);
+    var result =
+        geoPointService.setGeoPointGrade(
+            UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"),
+            UUID.fromString("a9346b4b-00c4-4438-96a6-5d6fb9bf7eb9"),
+            GradeType.MINUS);
 
     assertEquals(2, result.getBody());
   }
 
   @Test
-  @Order(12)
+  @Order(13)
   void getGeoPointGrade() {
-    var result = geoPointService.getGeoPointGrade(UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"));
+    var result =
+        geoPointService.getGeoPointGrade(UUID.fromString("834955b7-c8aa-43fe-a47e-54f7597ba671"));
 
     assertEquals(1, result.getBody());
   }
 
   @Test
-  @Order(13)
+  @Order(14)
   void deleteGeoPoint() {
-    geoPointService.deleteGeoPoint(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"), UUID.fromString("a9346b4b-00c4-4438-96a6-5d6fb9bf7eb9"));
-    var result = geoPointService.findGeoPointById(UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"), UUID.fromString("a9346b4b-00c4-4438-96a6-5d6fb9bf7eb9"));
+    geoPointService.deleteGeoPoint(
+        UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"),
+        UUID.fromString("a9346b4b-00c4-4438-96a6-5d6fb9bf7eb9"));
+    var result =
+        geoPointService.findGeoPointById(
+            UUID.fromString("1751ba42-3936-4284-bd2f-4e48eb39e900"),
+            UUID.fromString("a9346b4b-00c4-4438-96a6-5d6fb9bf7eb9"));
 
     assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
   }

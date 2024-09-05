@@ -1,5 +1,7 @@
 package ru.notivent.service;
 
+import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import ru.notivent.dao.GeoPointDao;
+import ru.notivent.dto.ExistGeoPointDto;
 import ru.notivent.dto.GeoPointDto;
 import ru.notivent.dto.GeoPointsDto;
 import ru.notivent.dto.UserGeoPointDto;
@@ -18,7 +22,10 @@ import ru.notivent.enums.GeoPointType;
 import ru.notivent.enums.GradeType;
 import ru.notivent.mapper.GeoPointMapper;
 import ru.notivent.model.GeoPoint;
+import ru.notivent.model.GeoPointImage;
 import ru.notivent.model.GradeLog;
+import ru.notivent.service.yandex.s3.ClientS3;
+import ru.notivent.service.yandex.s3.S3Service;
 
 @Slf4j
 @Service
@@ -32,6 +39,9 @@ public class GeoPointService {
   final SubscriptionService subscriptionService;
   final GradeLogService gradeLogService;
   final LocationService locationService;
+  final S3Service s3Service;
+  final GeoPointImageService geoPointImageService;
+  final ClientS3 clientS3;
 
   // TODO: This setting will be made by the user in the future
   private static final int MAX_POINTS_COUNT = 1000;
@@ -46,9 +56,9 @@ public class GeoPointService {
   @Delegate private final GeoPointDao geoPointDao;
 
   @Transactional
-  public ResponseEntity<GeoPointDto> createGeoPoint(GeoPointDto dto, UUID userUuid) {
+  public ResponseEntity<ExistGeoPointDto> createGeoPoint(GeoPointDto dto, UUID userId) {
     if (Objects.equals(dto.getType(), GeoPointType.PUBLIC)
-        && !subscriptionService.isUserHasActiveSubscription(userUuid)) {
+        && !subscriptionService.isUserHasActiveSubscription(userId)) {
       return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
     var isAcceptable =
@@ -60,11 +70,12 @@ public class GeoPointService {
             dto.getUserLatitude());
     if (!isAcceptable) return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
     var geoPointModel = geoPointMapper.toModel(dto);
-    val geoPointLive = dto.getCreatedAt().plusDays(7);
+    val geoPointLive = dto.getCreatedAt().plus(7, ChronoUnit.DAYS);
     geoPointModel.setLive(geoPointLive);
-    geoPointModel.setUserUuid(userUuid);
+    geoPointModel.setUserUuid(userId);
     try {
-      var location = locationService.findByAddressLine(geoPointModel.getLocation().getAddressLine());
+      var location =
+          locationService.findByAddressLine(geoPointModel.getLocation().getAddressLine());
       if (location.isPresent()) {
         geoPointModel.getLocation().setId(location.get().getId());
       } else {
@@ -72,13 +83,37 @@ public class GeoPointService {
         geoPointModel.getLocation().setId(locationId);
       }
     } catch (Exception ex) {
-      log.warn("Location is empty: user {}; coordinates: {}, {}", userUuid, geoPointModel.getLatitude(), geoPointModel.getLongitude());
+      log.warn(
+          "Location is empty: user {}; coordinates: {}, {}",
+          userId,
+          geoPointModel.getLatitude(),
+          geoPointModel.getLongitude());
     }
-
-    return ResponseEntity.ok(geoPointMapper.toDto(create(geoPointModel)));
+    val id = create(geoPointModel);
+    saveGeoPointImages(dto.getImages(), userId, id);
+    val geoPoint = findById(id);
+    return geoPoint
+        .map(point -> ResponseEntity.ok(geoPointMapper.toDto(point)))
+        .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
   }
 
-  public ResponseEntity<GeoPointDto> findGeoPointById(UUID userUuid, UUID uuid) {
+  private void saveGeoPointImages(Map<String, String> images, UUID userId, UUID geoPointId) {
+    if (!CollectionUtils.isEmpty(images)) {
+      var imageUrls = s3Service.saveImages(images, userId, clientS3);
+      var geoPointImages =
+          imageUrls.stream()
+              .map(
+                  imageUrl ->
+                      GeoPointImage.builder()
+                          .geoPointId(geoPointId)
+                          .imageUrl(imageUrl)
+                          .build())
+              .toList();
+      geoPointImageService.save(geoPointImages);
+    }
+  }
+
+  public ResponseEntity<ExistGeoPointDto> findGeoPointById(UUID userUuid, UUID uuid) {
     var geoPoint = findById(uuid);
     if (geoPoint.isPresent()) {
       var point = geoPoint.get();
@@ -93,7 +128,7 @@ public class GeoPointService {
   }
 
   public GeoPointsDto getAllGeoPointsForUser(UserGeoPointDto dto, UUID userUuid) {
-    var privatePoints = findByUser(userUuid);
+    var privatePoints = findByUserAndType(userUuid, GeoPointType.PRIVATE);
     val publicPointsCount = MAX_POINTS_COUNT - privatePoints.size();
     var publicPoints =
         findAllByUserAndRadius(dto.getLongitude(), dto.getLatitude(), RADIUS, publicPointsCount);
@@ -132,7 +167,8 @@ public class GeoPointService {
     var geoPoint = findById(geoPointUuid);
     if (geoPoint.isPresent()) {
       var point = geoPoint.get();
-      if (!updateGradeLog(point, gradeValue)) return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+      if (!updateGradeLog(point, gradeValue))
+        return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
       var newGrade = updateGrade(point.getGrade(), gradeValue);
       updateGrade(geoPointUuid, newGrade);
       return ResponseEntity.ok(newGrade);

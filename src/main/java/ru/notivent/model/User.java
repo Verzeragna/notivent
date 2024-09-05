@@ -1,13 +1,11 @@
 package ru.notivent.model;
 
+import java.time.Instant;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +15,6 @@ public class User {
     UUID uuid;
     String login;
     String password;
-    OffsetDateTime createdAt;
+    Instant createdAt;
     String userName;
 }

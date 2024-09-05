@@ -10,5 +10,5 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GeoPointsDto {
-    List<GeoPointDto> points;
+    List<ExistGeoPointDto> points;
 }

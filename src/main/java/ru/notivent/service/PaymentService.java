@@ -1,9 +1,10 @@
 package ru.notivent.service;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,13 @@ public class PaymentService {
   final UserService userService;
   final SubscriptionService subscriptionService;
 
+  @Value("${payment.receive}")
+  boolean isPaymentReceive;
+
   public ResponseEntity<PaymentDto> createOrder(UUID userUuid, CreateOrderDto createOrderDto) {
+    if (!isPaymentReceive) {
+      return new ResponseEntity<>(HttpStatus.SERVICE_UNAVAILABLE);
+    }
     var userOpt = userService.findById(userUuid);
     if (userOpt.isEmpty()) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     var user = userOpt.get();
@@ -56,7 +63,7 @@ public class PaymentService {
             .build());
   }
 
-  private Order buildOrder(UUID userId, UUID tariffId, OffsetDateTime createdAt) {
+  private Order buildOrder(UUID userId, UUID tariffId, Instant createdAt) {
     return Order.builder()
         .userId(userId)
         .tariffId(tariffId)

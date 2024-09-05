@@ -2,6 +2,7 @@ package ru.notivent.dto;
 
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import ru.notivent.enums.GeoPointType;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeoPointDto {
+public class ExistGeoPointDto {
     @NotNull
     UUID uuid;
     @NotNull
@@ -33,5 +34,5 @@ public class GeoPointDto {
     @NotNull
     LocationDto location;
     @NotNull
-    Map<String,String> images;
+    List<String> images;
 }

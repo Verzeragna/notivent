@@ -11,3 +11,8 @@ spring:
 mybatis:
   configuration:
     call-setters-on-nulls: false
+
+yandex:
+  s3:
+    accessKeyId: test
+    secretAccessKey: test

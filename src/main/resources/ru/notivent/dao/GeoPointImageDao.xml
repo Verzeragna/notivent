@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.notivent.dao.GeoPointImageDao">
+
+    <select id="save" parameterType="map">
+        INSERT INTO geo_point_image(geo_point_id,image_url)
+        VALUES
+        <foreach collection="images" item="image" separator=",">
+            (#{image.geoPointId}::uuid,#{image.imageUrl})
+        </foreach>
+    </select>
+
+</mapper>

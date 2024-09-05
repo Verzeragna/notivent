@@ -1,9 +1,8 @@
 package ru.notivent.dao;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
-
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import ru.notivent.enums.OrderStatus;
@@ -16,7 +15,7 @@ public interface OrderDao {
 
     Optional<Order> findById(@Param("orderId") int orderId);
 
-    void updateStatusById(@Param("orderId") int orderId, @Param("status") OrderStatus status, @Param("updatedAt") OffsetDateTime updatedAt);
+    void updateStatusById(@Param("orderId") int orderId, @Param("status") OrderStatus status, @Param("updatedAt") Instant updatedAt);
 
     void updateSubscription(@Param("orderId") int orderId, @Param("subscriptionId") UUID subscriptionId);
 }
