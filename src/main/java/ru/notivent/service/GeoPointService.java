@@ -99,7 +99,7 @@ public class GeoPointService {
 
   private void saveGeoPointImages(Map<String, String> images, UUID userId, UUID geoPointId) {
     if (!CollectionUtils.isEmpty(images)) {
-      var imageUrls = s3Service.saveImages(images, userId, clientS3);
+      var imageUrls = s3Service.saveImages(images, userId, geoPointId, clientS3);
       var geoPointImages =
           imageUrls.stream()
               .map(
