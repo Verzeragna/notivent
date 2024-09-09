@@ -66,7 +66,7 @@ class S3ServiceTest {
     var request = CreateBucketRequest.builder().bucket(IMAGES_BUCKET).build();
     client.getClient().createBucket(request);
 
-    var result = s3Service.saveImages(images, UUID.randomUUID(), client);
+    var result = s3Service.saveImages(images, UUID.randomUUID(), UUID.randomUUID(), client);
 
     assertFalse(result.isEmpty());
   }
