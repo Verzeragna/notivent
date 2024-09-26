@@ -21,8 +21,12 @@ public interface GeoPointMapper {
     @Mapping(target = "images", source = "images", qualifiedByName = "getUrls")
     ExistGeoPointDto toDto(GeoPoint dto);
 
+    @Mapping(target = "images", source = "images", ignore = true)
+    GeoPoint toModel(ExistGeoPointDto dto);
+
     @Named("getUrls")
     default List<String> getUrls(List<GeoPointImage> images) {
         return images.stream().map(GeoPointImage::getImageUrl).collect(Collectors.toList());
     }
+
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import ru.notivent.dto.ExistGeoPointDto;
 import ru.notivent.dto.GeoPointDto;
@@ -25,7 +26,7 @@ import ru.notivent.enums.GradeType;
 import ru.notivent.service.GeoPointService;
 
 @RestController
-@RequestMapping("geopoint")
+@RequestMapping(value = {"geopoint"})
 @RequiredArgsConstructor
 @ExtensionMethod(ResponseEntity.class)
 public class GeoPointController {
@@ -43,6 +44,17 @@ public class GeoPointController {
   public ResponseEntity<ExistGeoPointDto> createGeoPoint(
           @RequestHeader(X_AUTH) UUID userUuid, @Valid @RequestBody GeoPointDto dto) {
     return geoPointService.createGeoPoint(dto, userUuid);
+  }
+
+  /**
+   * Update geo point
+   * @param dto Geo point data
+   * @return Operation result
+   */
+  @PostMapping("update")
+  public ResponseEntity<Void> updateGeoPint(@Valid @RequestBody ExistGeoPointDto dto) {
+    geoPointService.updateGeoPoint(dto);
+    return ok().build();
   }
 
   /**

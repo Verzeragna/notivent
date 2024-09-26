@@ -97,6 +97,12 @@ public class GeoPointService {
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
   }
 
+  @Transactional
+  public void updateGeoPoint(ExistGeoPointDto dto) {
+    val geoPoint = geoPointMapper.toModel(dto);
+    updateNameAndDescription(geoPoint);
+  }
+
   private void saveGeoPointImages(Map<String, String> images, UUID userId, UUID geoPointId) {
     if (!CollectionUtils.isEmpty(images)) {
       var imageUrls = s3Service.saveImages(images, userId, geoPointId, clientS3);

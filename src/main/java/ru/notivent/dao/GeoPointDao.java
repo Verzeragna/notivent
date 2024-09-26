@@ -37,4 +37,6 @@ public interface GeoPointDao {
 
   void updateGrade(@Param("uuid") UUID uuid,
                    @Param("grade") Integer grade);
+
+  void updateNameAndDescription(@Param("entity") GeoPoint geoPoint);
 }

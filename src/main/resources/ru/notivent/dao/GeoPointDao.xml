@@ -187,4 +187,11 @@
         SET grade = #{grade}
         WHERE uuid = #{uuid}
     </update>
+
+    <update id="updateNameAndDescription" parameterType="map">
+        UPDATE geo_point
+        SET name = #{entity.name},
+        description = #{entity.description}
+        WHERE uuid = #{entity.uuid}
+    </update>
 </mapper>
