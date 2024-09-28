@@ -49,6 +49,7 @@ mybatis:
 
 yandex:
   s3:
+    image-bucket: geopoint-images
     accessKeyId:
     secretAccessKey:
 

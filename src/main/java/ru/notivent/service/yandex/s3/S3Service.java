@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.GetUrlRequest;
@@ -18,17 +19,19 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 @RequiredArgsConstructor
 public class S3Service {
 
-  private static final String IMAGES_BUCKET = "geopoint-images";
+  @Value("${yandex.s3.image-bucket}")
+  String imageBucket;
 
-  public List<String> saveImages(Map<String, String> images, UUID userId, UUID geoPointId, ClientS3 clientS3) {
+  public List<String> saveImages(
+      Map<String, String> images, UUID userId, UUID geoPointId, ClientS3 clientS3) {
     var urls = new ArrayList<String>();
     int i = 1;
     for (Map.Entry<String, String> image : images.entrySet()) {
       var key = userId + "/" + geoPointId + "/" + i + image.getValue();
-      var createObjectRequest = PutObjectRequest.builder().bucket(IMAGES_BUCKET).key(key).build();
+      var createObjectRequest = PutObjectRequest.builder().bucket(imageBucket).key(key).build();
       var bytes = Base64.getDecoder().decode(image.getKey().getBytes());
       clientS3.getClient().putObject(createObjectRequest, RequestBody.fromBytes(bytes));
-      var url = getObjectUrl(IMAGES_BUCKET, key, clientS3);
+      var url = getObjectUrl(imageBucket, key, clientS3);
       urls.add(url.toString());
       i++;
     }
