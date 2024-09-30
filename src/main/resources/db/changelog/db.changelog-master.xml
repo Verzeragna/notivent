@@ -27,4 +27,6 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
     <include file="change-log_17.xml" relativeToChangelogFile="true"/>
     <include file="change-log_18.xml" relativeToChangelogFile="true"/>
     <include file="change-log_19.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_20.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_21.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

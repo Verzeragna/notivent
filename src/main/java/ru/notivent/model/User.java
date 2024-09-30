@@ -17,4 +17,5 @@ public class User {
     String password;
     Instant createdAt;
     String userName;
+    String profileImage;
 }

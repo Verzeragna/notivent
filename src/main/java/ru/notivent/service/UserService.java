@@ -9,6 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.notivent.dao.UserDao;
 import ru.notivent.dto.PasswordChangeDto;
+import ru.notivent.dto.UserProfileDto;
+import ru.notivent.dto.UserProfileImageDto;
+import ru.notivent.mapper.UserMapper;
+import ru.notivent.service.yandex.s3.ClientS3;
+import ru.notivent.service.yandex.s3.S3Service;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +22,9 @@ public class UserService {
   @Delegate final UserDao userDao;
   final EmailService emailService;
   final PasswordService passwordService;
+  final UserMapper userMapper;
+  final S3Service s3Service;
+  final ClientS3 clientS3;
 
   public String getUserName(UUID userUuid) {
     var user = userDao.findById(userUuid);
@@ -66,5 +74,24 @@ public class UserService {
       return ResponseEntity.ok().build();
     }
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
+
+  public ResponseEntity<UserProfileDto> getUserProfile(UUID userId) {
+    var userOpt = findById(userId);
+    if (userOpt.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+    var user = userOpt.get();
+    return ResponseEntity.ok(userMapper.toProfileDto(user));
+  }
+
+  public ResponseEntity<Void> saveUserProfileImage(UserProfileImageDto dto) {
+    var userOpt = findById(dto.userId());
+    if (userOpt.isEmpty()) {
+      return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
+    var profileImageUrl = s3Service.saveProfileImage(dto.image(), dto.userId(), clientS3);
+    updateProfileImage(dto.userId(), profileImageUrl);
+    return ResponseEntity.ok().build();
   }
 }

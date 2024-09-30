@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.notivent.dto.PasswordChangeDto;
 import ru.notivent.dto.PasswordResetDto;
+import ru.notivent.dto.UserProfileDto;
+import ru.notivent.dto.UserProfileImageDto;
 import ru.notivent.service.UserService;
 
 @RestController
@@ -42,5 +44,15 @@ public class UserController {
     @PostMapping("password/change")
     public ResponseEntity<Void> passwordChange(@RequestHeader(X_AUTH) UUID userUuid, @Valid @RequestBody PasswordChangeDto dto) {
         return userService.passwordChange(userUuid, dto);
+    }
+
+    @GetMapping("profile")
+    public ResponseEntity<UserProfileDto> getUserProfile(@RequestHeader(X_AUTH) UUID userUuid) {
+        return userService.getUserProfile(userUuid);
+    }
+
+    @PostMapping("profile/image")
+    public ResponseEntity<Void> saveUserProfileImage(@RequestBody UserProfileImageDto dto) {
+        return userService.saveUserProfileImage(dto);
     }
 }

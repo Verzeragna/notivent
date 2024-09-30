@@ -21,4 +21,6 @@ public interface UserDao {
     void updateUserPassword(@Param("uuid") UUID uuid, @Param("password") String password);
 
     void updateUserNameById(@Param("uuid") UUID uuid, @Param("userName") String userName);
+
+    void updateProfileImage(@Param("uuid") UUID uuid, @Param("url") String url);
 }

@@ -40,4 +40,10 @@
         WHERE uuid = #{uuid}::uuid
     </update>
 
+    <update id="updateProfileImage">
+        UPDATE "user"
+        SET profile_image = #{url}
+        WHERE uuid = #{uuid}::uuid
+    </update>
+
 </mapper>
