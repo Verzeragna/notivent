@@ -4,6 +4,8 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import ru.notivent.model.User;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,6 +16,8 @@ public interface UserDao {
 
     Optional<User> findById(@Param("uuid") UUID uuid);
 
+    List<User> findByIds(@Param("ids") Collection<UUID> ids);
+
     Optional<User> findByLogin(@Param("login") String login);
 
     Optional<User> findByUserName(@Param("userName") String userName);
@@ -23,4 +27,5 @@ public interface UserDao {
     void updateUserNameById(@Param("uuid") UUID uuid, @Param("userName") String userName);
 
     void updateProfileImage(@Param("uuid") UUID uuid, @Param("url") String url);
+
 }

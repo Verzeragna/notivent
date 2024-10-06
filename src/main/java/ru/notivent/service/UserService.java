@@ -1,9 +1,12 @@
 package ru.notivent.service;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Delegate;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,19 +15,43 @@ import ru.notivent.dto.PasswordChangeDto;
 import ru.notivent.dto.UserProfileDto;
 import ru.notivent.dto.UserProfileImageDto;
 import ru.notivent.mapper.UserMapper;
+import ru.notivent.model.User;
 import ru.notivent.service.yandex.s3.ClientS3;
 import ru.notivent.service.yandex.s3.S3Service;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
-  @Delegate final UserDao userDao;
+  
+  final UserDao userDao;
   final EmailService emailService;
   final PasswordService passwordService;
   final UserMapper userMapper;
   final S3Service s3Service;
   final ClientS3 clientS3;
+
+  public Optional<User> findById(UUID uuid) {
+    return userDao.findById(uuid);
+  }
+
+  public List<User> findByIds(Collection<UUID> ids) {
+    if (ids.isEmpty()) {
+      return Collections.emptyList();
+    }
+    return userDao.findByIds(ids);
+  }
+
+  public Optional<User> findByUserName(String userName) {
+    return userDao.findByUserName(userName.toLowerCase());
+  }
+
+  public Optional<User> findByLogin(String login) {
+    return userDao.findByLogin(login);
+  }
+
+  public User create(User entity) {
+    return userDao.create(entity);
+  }
 
   public String getUserName(UUID userUuid) {
     var user = userDao.findById(userUuid);
@@ -48,12 +75,12 @@ public class UserService {
   }
 
   public ResponseEntity<Void> passwordReset(String email) {
-    var userOpt = findByLogin(email);
+    var userOpt = userDao.findByLogin(email);
     if (userOpt.isPresent()) {
       var user = userOpt.get();
       var newPassword = passwordService.generatePassword();
       var encryptedPassword = passwordService.encrypt(newPassword);
-      updateUserPassword(user.getUuid(), encryptedPassword);
+      userDao.updateUserPassword(user.getUuid(), encryptedPassword);
       emailService.sendEmail(email, newPassword);
       return ResponseEntity.ok().build();
     } else {
@@ -62,7 +89,7 @@ public class UserService {
   }
 
   public ResponseEntity<Void> passwordChange(UUID userUuid, PasswordChangeDto dto) {
-    var userOpt = findById(userUuid);
+    var userOpt = userDao.findById(userUuid);
     if (userOpt.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
@@ -70,14 +97,14 @@ public class UserService {
     var oldPassword = passwordService.decodeBase64(dto.getOldPassword());
     if (passwordService.matches(oldPassword, passwordService.decodeBase64(user.getPassword()))) {
       var encryptedPassword = passwordService.encrypt(oldPassword);
-      updateUserPassword(user.getUuid(), encryptedPassword);
+      userDao.updateUserPassword(user.getUuid(), encryptedPassword);
       return ResponseEntity.ok().build();
     }
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
   public ResponseEntity<UserProfileDto> getUserProfile(UUID userId) {
-    var userOpt = findById(userId);
+    var userOpt = userDao.findById(userId);
     if (userOpt.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
@@ -86,12 +113,12 @@ public class UserService {
   }
 
   public ResponseEntity<Void> saveUserProfileImage(UserProfileImageDto dto) {
-    var userOpt = findById(dto.userId());
+    var userOpt = userDao.findById(dto.userId());
     if (userOpt.isEmpty()) {
       return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
     var profileImageUrl = s3Service.saveProfileImage(dto.image(), dto.userId(), clientS3);
-    updateProfileImage(dto.userId(), profileImageUrl);
+    userDao.updateProfileImage(dto.userId(), profileImageUrl);
     return ResponseEntity.ok().build();
   }
 }

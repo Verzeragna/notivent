@@ -8,7 +8,9 @@
 http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
 http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
 http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
-    <changeSet id="21" author="Sergei Andreev">
-        <sql>ALTER TYPE endpoint_name ADD VALUE IF NOT EXISTS 'SAVE_USER_PROFILE_IMAGE'</sql>
+    <changeSet id="23" author="Sergei Andreev">
+        <sql>ALTER TYPE endpoint_name ADD VALUE IF NOT EXISTS 'CONTACTS_GET_ALL'</sql>
+        <sql>ALTER TYPE endpoint_name ADD VALUE IF NOT EXISTS 'CONTACTS_ADD_CONTACT'</sql>
+        <sql>ALTER TYPE endpoint_name ADD VALUE IF NOT EXISTS 'CONTACTS_REMOVE_CONTACT'</sql>
     </changeSet>
 </databaseChangeLog>
