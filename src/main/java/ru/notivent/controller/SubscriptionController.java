@@ -24,4 +24,9 @@ public class SubscriptionController {
       @RequestHeader(X_AUTH) UUID userUuid) {
     return subscriptionService.findUserSubscription(userUuid);
   }
+
+  @GetMapping("check")
+  public ResponseEntity<Boolean> isUserHasActiveSubscription(@RequestHeader(X_AUTH) UUID userId) {
+    return ResponseEntity.ok(subscriptionService.isUserHasActiveSubscription(userId));
+  }
 }

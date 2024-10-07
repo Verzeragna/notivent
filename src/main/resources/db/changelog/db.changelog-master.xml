@@ -32,4 +32,5 @@ http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibas
     <include file="change-log_22.xml" relativeToChangelogFile="true"/>
     <include file="change-log_23.xml" relativeToChangelogFile="true"/>
     <include file="change-log_24.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_25.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

@@ -25,13 +25,16 @@ import ru.notivent.model.Contacts;
 @RequiredArgsConstructor
 public class ContactsService {
 
-    final UserService userService;
-    final ContactsMapper contactsMapper;
+  final UserService userService;
+  final SubscriptionService subscriptionService;
+  final ContactsMapper contactsMapper;
 
-    @Delegate
-    final ContactsDAO contactsDAO;
+  @Delegate final ContactsDAO contactsDAO;
 
-    public ResponseEntity<List<ContactsDto>> getUserContacts(UUID userId) {
+  public ResponseEntity<List<ContactsDto>> getUserContacts(UUID userId) {
+    if (!subscriptionService.isUserHasActiveSubscription(userId)) {
+      return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+    }
     var user = userService.findById(userId);
     if (user.isEmpty()) {
       log.error("User {} not found.", userId);
@@ -55,53 +58,63 @@ public class ContactsService {
             .sorted(Comparator.comparing(ContactsDto::userName))
             .toList();
     return ResponseEntity.ok(userContactDtos);
+  }
+
+  public ResponseEntity<Void> addUserToContacts(ContactsAddDto dto) {
+      if (!subscriptionService.isUserHasActiveSubscription(dto.mainUserId())) {
+          return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+      }
+    // check main user
+    var user = userService.findById(dto.mainUserId());
+    if (user.isEmpty()) {
+      log.error("Main user {} not found.", dto.mainUserId());
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<Void> addUserToContacts(ContactsAddDto dto) {
-        //check main user
-        var user = userService.findById(dto.mainUserId());
-        if (user.isEmpty()) {
-            log.error("Main user {} not found.", dto.mainUserId());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        //check sub user
-        user = userService.findById(dto.subUserId());
-        if (user.isEmpty()) {
-            log.error("Sub user {} not found.", dto.subUserId());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        var contact = contactsMapper.toModel(dto);
-        if (contactsDAO.checkIfContactsExists(contact) > 0) {
-            log.error("Contact already exists. Main user {}, sub user {}.", dto.mainUserId(),dto.subUserId());
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        contactsDAO.save(contact);
-        return ResponseEntity.ok().build();
+    // check sub user
+    user = userService.findById(dto.subUserId());
+    if (user.isEmpty()) {
+      log.error("Sub user {} not found.", dto.subUserId());
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<List<ContactsDto>> removeUserFromContacts(UUID mainUserId, UUID contactId) {
-        var user = userService.findById(contactId);
-        if (user.isEmpty()) {
-            log.error("Contact user {} not found.", contactId);
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        var contact = new Contacts(mainUserId, contactId, null);
-        contactsDAO.delete(contact);
-        return getUserContacts(mainUserId);
+    var contact = contactsMapper.toModel(dto);
+    if (contactsDAO.checkIfContactsExists(contact) > 0) {
+      log.error(
+          "Contact already exists. Main user {}, sub user {}.", dto.mainUserId(), dto.subUserId());
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    public ResponseEntity<List<ContactsDto>> searchContact(UUID userId, SearchContactDto dto) {
-        var userOpt = userService.findByUserName(dto.value());
-        if (userOpt.isPresent()) {
-            val user = userOpt.get();
-            if (contactsDAO.checkIfContactsExists(contactsMapper.toModelFromUser(user, userId)) > 0) {
-                return ResponseEntity.ok(Collections.emptyList());
-            }
-            return ResponseEntity.ok(List.of(contactsMapper.toDto(user)));
-        }
+    contactsDAO.save(contact);
+    return ResponseEntity.ok().build();
+  }
+
+  public ResponseEntity<List<ContactsDto>> removeUserFromContacts(UUID mainUserId, UUID contactId) {
+      if (!subscriptionService.isUserHasActiveSubscription(mainUserId)) {
+          return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+      }
+    var user = userService.findById(contactId);
+    if (user.isEmpty()) {
+      log.error("Contact user {} not found.", contactId);
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    var contact = new Contacts(mainUserId, contactId, null);
+    contactsDAO.delete(contact);
+    return getUserContacts(mainUserId);
+  }
+
+  public ResponseEntity<List<ContactsDto>> searchContact(UUID userId, SearchContactDto dto) {
+      if (!subscriptionService.isUserHasActiveSubscription(userId)) {
+          return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+      }
+    var userOpt = userService.findByUserName(dto.value());
+    if (userOpt.isPresent()) {
+      val user = userOpt.get();
+      if (contactsDAO.checkIfContactsExists(contactsMapper.toModelFromUser(user, userId)) > 0) {
         return ResponseEntity.ok(Collections.emptyList());
+      }
+      return ResponseEntity.ok(List.of(contactsMapper.toDto(user)));
     }
+    return ResponseEntity.ok(Collections.emptyList());
+  }
 }
