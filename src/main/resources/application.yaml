@@ -23,8 +23,8 @@ spring:
   datasource:
     jdbcurl: jdbc:postgresql://localhost:5432/notivent?currentSchema=public
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: 05konrad05
+    username:
+    password:
   liquibase:
     default-schema: public
     change-log: classpath:db/changelog/db.changelog-master.xml
