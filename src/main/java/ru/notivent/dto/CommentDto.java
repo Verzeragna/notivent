@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class CommentDto {
     UUID uuid;
     String nickName;
+    String profileImage;
     String text;
     Instant createdAt;
 }

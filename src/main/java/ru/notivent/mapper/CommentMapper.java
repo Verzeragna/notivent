@@ -8,6 +8,7 @@ import ru.notivent.model.Comment;
 @Mapper(componentModel = "spring")
 public interface CommentMapper {
 
-    @Mapping(source = "comment.user.userName", target = "nickName")
+    @Mapping(target = "profileImage", source = "comment.user.profileImage")
+    @Mapping(target = "nickName", source = "comment.user.userName")
     CommentDto toDto(Comment comment);
 }
