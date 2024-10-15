@@ -1,5 +1,6 @@
 package ru.notivent.service;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.http.HttpStatus;
@@ -27,9 +27,8 @@ public class ContactsService {
 
   final UserService userService;
   final SubscriptionService subscriptionService;
+  final ContactsDAO contactsDAO;
   final ContactsMapper contactsMapper;
-
-  @Delegate final ContactsDAO contactsDAO;
 
   public ResponseEntity<List<ContactsDto>> getUserContacts(UUID userId) {
     if (!subscriptionService.isUserHasActiveSubscription(userId)) {

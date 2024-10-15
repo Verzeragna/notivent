@@ -11,6 +11,7 @@
         <association property="user" javaType="ru.notivent.model.User">
             <result column="user_uuid" property="uuid"/>
             <result column="user_name" property="userName"/>
+            <result column="user_profile_image" property="profileImage"/>
         </association>
         <association property="geoPoint" javaType="ru.notivent.model.GeoPoint">
             <result column="p_uuid" property="uuid"/>
@@ -24,6 +25,7 @@
             c.created_at AS com_created_at,
             u.uuid AS user_uuid,
             u.user_name AS user_name,
+            u.profile_image AS user_profile_image,
             gp.uuid AS p_uuid
         FROM geo_point_comments c
         JOIN "user" u ON c.user_uuid = u.uuid
