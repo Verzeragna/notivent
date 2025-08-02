@@ -1,0 +1,14 @@
+{
+  "Servers" : {
+    "1" : {
+      "Group" : "Servers",
+      "Name" : "postgres",
+      "Host" : "89.169.163.101",
+      "Port" : 5432,
+      "MaintenanceDB" : "notivent",
+      "Username" : "andreevsv",
+      "PassFile" : "/pgadmin4/pgpass",
+      "SSLMode" : "prefer"
+    }
+  }
+}

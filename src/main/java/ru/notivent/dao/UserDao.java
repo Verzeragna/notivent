@@ -1,0 +1,31 @@
+package ru.notivent.dao;
+
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import ru.notivent.model.User;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+@Repository
+public interface UserDao {
+
+    User create(@Param("entity") User entity);
+
+    Optional<User> findById(@Param("uuid") UUID uuid);
+
+    List<User> findByIds(@Param("ids") Collection<UUID> ids);
+
+    Optional<User> findByLogin(@Param("login") String login);
+
+    Optional<User> findByUserName(@Param("userName") String userName);
+
+    void updateUserPassword(@Param("uuid") UUID uuid, @Param("password") String password);
+
+    void updateUserNameById(@Param("uuid") UUID uuid, @Param("userName") String userName);
+
+    void updateProfileImage(@Param("uuid") UUID uuid, @Param("url") String url);
+
+}

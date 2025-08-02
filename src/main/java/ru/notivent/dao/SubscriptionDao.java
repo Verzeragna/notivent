@@ -1,0 +1,19 @@
+package ru.notivent.dao;
+
+import java.time.Instant;
+import java.util.Optional;
+import java.util.UUID;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+import ru.notivent.model.Subscription;
+
+@Repository
+public interface SubscriptionDao {
+
+    Optional<Subscription> findByUserUuid(@Param("userUuid") UUID userUuid);
+
+    void updateEndAt(@Param("endAt") Instant endAt,
+                     @Param("uuid") UUID subscriptionUuid);
+
+    void create(@Param("entity") Subscription entity);
+}

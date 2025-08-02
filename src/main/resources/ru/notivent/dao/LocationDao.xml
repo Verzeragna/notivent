@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.notivent.dao.LocationDao">
+
+    <select id="save" parameterType="map" resultType="java.util.UUID">
+        INSERT INTO location(postal_code,country,area,city,street,house_number,address_line)
+        VALUES(#{entity.postalCode},#{entity.country},#{entity.area},#{entity.city},#{entity.street},#{entity.houseNumber},#{entity.addressLine})
+        RETURNING uuid
+    </select>
+
+    <select id="findByAddressLine" resultType="ru.notivent.model.Location">
+        SELECT *
+        FROM location
+        WHERE address_line = #{addressLine}
+    </select>
+
+</mapper>

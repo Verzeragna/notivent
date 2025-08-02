@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.notivent.dao.SubscriptionDao">
+
+    <resultMap id="SubscriptionMap" type="ru.notivent.model.Subscription">
+        <id property="uuid" column="uuid"/>
+        <association property="tariff" javaType="ru.notivent.model.Tariff">
+            <id property="uuid" column="t_uuid"/>
+        </association>
+    </resultMap>
+
+    <select id="findByUserUuid" resultMap="SubscriptionMap">
+        SELECT s.*,
+        t.uuid AS t_uuid,
+        t.name,
+        t.type,
+        t.price
+        FROM subscription s
+        JOIN tariff t ON t.uuid = s.tariff_uuid
+        WHERE user_uuid = #{userUuid}
+    </select>
+
+    <update id="updateEndAt">
+        UPDATE subscription
+        SET end_at = #{endAt}
+        WHERE uuid = #{uuid}
+    </update>
+
+    <insert id="create" parameterType="map">
+        INSERT INTO subscription(tariff_uuid,user_uuid,end_at)
+        VALUES(#{entity.tariff.uuid},#{entity.userUuid},#{entity.endAt})
+    </insert>
+</mapper>

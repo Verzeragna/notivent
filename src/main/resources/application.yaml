@@ -1,0 +1,58 @@
+logging:
+  config: classpath:logback-spring.xml
+  level:
+    com:
+      example:
+        demo: DEBUG
+
+management:
+  server:
+    port: 6150
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+server:
+  port: 8010
+  servlet:
+    context-path: /notivent
+    session:
+      timeout: 15m
+spring:
+  datasource:
+    jdbcurl: jdbc:postgresql://localhost:5432/notivent?currentSchema=public
+    driver-class-name: org.postgresql.Driver
+    username:
+    password:
+  liquibase:
+    default-schema: public
+    change-log: classpath:db/changelog/db.changelog-master.xml
+  mail:
+    host: smtp.mail.ru
+    username:
+    password:
+    properties:
+      mail:
+        transport:
+          protocol: smtp
+        smtp:
+          port: 2525
+          auth: true
+          starttls:
+            enable: true
+            required: true
+
+mybatis:
+  configuration:
+    call-setters-on-nulls: false
+
+yandex:
+  s3:
+    image-bucket: geopoint-images
+    profile-image-bucket: profile-image
+    accessKeyId:
+    secretAccessKey:
+
+payment:
+  receive: true

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ru.notivent.dao.UserDao">
+
+    <select id="create" parameterType="map" resultType="ru.notivent.model.User">
+        INSERT INTO "user"(login,password,created_at)
+        VALUES(#{entity.login},#{entity.password},now())
+        RETURNING *
+    </select>
+
+    <select id="findById" resultType="ru.notivent.model.User">
+        SELECT *
+        FROM "user"
+        WHERE uuid = #{uuid}::uuid
+    </select>
+
+    <select id="findByIds" resultType="ru.notivent.model.User">
+        SELECT *
+        FROM "user"
+        WHERE uuid IN (<foreach collection="ids" item="id" separator=","> #{id}</foreach>)
+    </select>
+
+    <select id="findByLogin" resultType="ru.notivent.model.User">
+        SELECT *
+        FROM "user"
+        WHERE login = #{login}
+    </select>
+
+    <select id="findByUserName" resultType="ru.notivent.model.User">
+        SELECT *
+        FROM "user"
+        WHERE LOWER(user_name) = #{userName}
+        ORDER BY created_at
+        LIMIT 1
+    </select>
+
+    <update id="updateUserPassword">
+        UPDATE "user"
+        SET password = #{password}
+        WHERE uuid = #{uuid}::uuid
+    </update>
+
+    <update id="updateUserNameById">
+        UPDATE "user"
+        SET user_name = #{userName}
+        WHERE uuid = #{uuid}::uuid
+    </update>
+
+    <update id="updateProfileImage">
+        UPDATE "user"
+        SET profile_image = #{url}
+        WHERE uuid = #{uuid}::uuid
+    </update>
+
+    <select id="findProfileImageByUserId" resultType="string">
+        SELECT
+            profile_image
+        FROM "user"
+        WHERE uuid = #{userId}::uuid
+    </select>
+
+</mapper>

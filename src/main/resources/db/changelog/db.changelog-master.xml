@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <include file="change-log_1.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_2.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_3.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_4.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_5.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_6.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_7.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_8.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_9.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_10.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_11.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_12.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_13.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_14.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_15.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_16.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_17.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_18.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_19.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_20.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_21.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_22.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_23.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_24.xml" relativeToChangelogFile="true"/>
+    <include file="change-log_25.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

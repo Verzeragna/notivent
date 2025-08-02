@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet id="15" author="Sergei Andreev">
+        <sql>ALTER type endpoint_name ADD VALUE IF NOT exists 'CREATE_ORDER'</sql>
+        <sql>ALTER type endpoint_name ADD VALUE IF NOT exists 'UPDATE_ORDER'</sql>
+        <sql>DROP TYPE IF EXISTS order_status</sql>
+        <sql>CREATE TYPE order_status AS ENUM ('PENDING', 'DONE', 'ERROR', 'CANCELED')</sql>
+        <createTable tableName="order">
+            <column name="id" type="serial" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_uuid" type="uuid">
+                <constraints foreignKeyName="user_uuid_fk" referencedTableName="user" referencedColumnNames="uuid" nullable="false"/>
+            </column>
+            <column name="subscription_uuid" type="uuid">
+                <constraints foreignKeyName="subscription_uuid_fk" referencedTableName="subscription" referencedColumnNames="uuid"/>
+            </column>
+            <column name="tariff_uuid" type="uuid">
+                <constraints foreignKeyName="tariff_uuid_fk" referencedTableName="tariff" referencedColumnNames="uuid" nullable="false"/>
+            </column>
+            <column name="status" type="order_status">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <dropForeignKeyConstraint baseTableName="tariff" constraintName="payment_parameters_uuid_fk"/>
+        <dropColumn tableName="tariff" columnName="payment_parameters_uuid"/>
+    </changeSet>
+</databaseChangeLog>
