@@ -1,6 +1,8 @@
 package ru.notivent.dto;
 
 import jakarta.validation.constraints.NotNull;
+
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.Map;
 import java.util.UUID;
@@ -12,7 +14,7 @@ import ru.notivent.enums.GeoPointType;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeoPointDto {
+public class GeoPointDto implements Serializable {
     @NotNull
     UUID uuid;
     @NotNull
