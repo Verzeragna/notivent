@@ -5,15 +5,16 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
-import lombok.experimental.Delegate;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import ru.notivent.dao.GeoPointDao;
 import ru.notivent.dto.ExistGeoPointDto;
 import ru.notivent.dto.GeoPointDto;
 import ru.notivent.dto.GeoPointsDto;
@@ -42,6 +43,7 @@ public class GeoPointService {
   final S3Service s3Service;
   final GeoPointImageService geoPointImageService;
   final ClientS3 clientS3;
+  final GeoPointRepositoryService geoPointRepositoryService;
 
   // TODO: This setting will be made by the user in the future
   private static final int MAX_POINTS_COUNT = 1000;
@@ -53,16 +55,14 @@ public class GeoPointService {
   // distance in meters
   private static final int MAX_DISTANCE = 1000;
 
-  @Delegate private final GeoPointDao geoPointDao;
 
-  @Transactional
   public ResponseEntity<ExistGeoPointDto> createGeoPoint(GeoPointDto dto, UUID userId) {
     if (Objects.equals(dto.getType(), GeoPointType.PUBLIC)
         && !subscriptionService.isUserHasActiveSubscription(userId)) {
       return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
     }
     var isAcceptable =
-        isPointsHaveAcceptableDistance(
+            geoPointRepositoryService.isPointsHaveAcceptableDistance(
             MAX_DISTANCE,
             dto.getLongitude(),
             dto.getLatitude(),
@@ -89,9 +89,13 @@ public class GeoPointService {
           geoPointModel.getLatitude(),
           geoPointModel.getLongitude());
     }
-    val id = create(geoPointModel);
-    saveGeoPointImages(dto.getImages(), userId, id);
-    val geoPoint = findById(id);
+    val id = geoPointRepositoryService.create(geoPointModel);
+    try {
+      saveGeoPointImages(dto.getImages(), userId, id);
+    } catch (Exception ex) {
+      log.error("Image store does not support");
+    }
+    val geoPoint = geoPointRepositoryService.findById(id);
     return geoPoint
         .map(point -> ResponseEntity.ok(geoPointMapper.toDto(point)))
         .orElseGet(() -> new ResponseEntity<>(HttpStatus.BAD_REQUEST));
@@ -100,7 +104,7 @@ public class GeoPointService {
   @Transactional
   public void updateGeoPoint(ExistGeoPointDto dto) {
     val geoPoint = geoPointMapper.toModel(dto);
-    updateNameAndDescription(geoPoint);
+    geoPointRepositoryService.updateNameAndDescription(geoPoint);
   }
 
   private void saveGeoPointImages(Map<String, String> images, UUID userId, UUID geoPointId) {
@@ -120,7 +124,7 @@ public class GeoPointService {
   }
 
   public ResponseEntity<ExistGeoPointDto> findGeoPointById(UUID userUuid, UUID uuid) {
-    var geoPoint = findById(uuid);
+    var geoPoint = geoPointRepositoryService.findById(uuid);
     if (geoPoint.isPresent()) {
       var point = geoPoint.get();
       if (Objects.equals(point.getType(), GeoPointType.PUBLIC)
@@ -134,10 +138,10 @@ public class GeoPointService {
   }
 
   public GeoPointsDto getAllGeoPointsForUser(UserGeoPointDto dto, UUID userUuid) {
-    var privatePoints = findByUserAndType(userUuid, GeoPointType.PRIVATE);
+    var privatePoints = geoPointRepositoryService.findByUserAndType(userUuid, GeoPointType.PRIVATE);
     val publicPointsCount = MAX_POINTS_COUNT - privatePoints.size();
     var publicPoints =
-        findAllByUserAndRadius(dto.getLongitude(), dto.getLatitude(), RADIUS, publicPointsCount);
+            geoPointRepositoryService.findAllByUserAndRadius(dto.getLongitude(), dto.getLatitude(), RADIUS, publicPointsCount);
     privatePoints.addAll(publicPoints);
     return new GeoPointsDto(privatePoints.stream().map(geoPointMapper::toDto).toList());
   }
@@ -146,13 +150,13 @@ public class GeoPointService {
   public void deleteGeoPoint(UUID userUuid, UUID geoPointUuid) {
     // Условие не удалять. Защита от дурака.
     if (isGeoPointBelongUser(userUuid, geoPointUuid)) {
-      var geoPoint = findById(geoPointUuid);
+      var geoPoint = geoPointRepositoryService.findById(geoPointUuid);
       if (geoPoint.isPresent()) {
         geoPointHistoryService.create(geoPoint.get());
         var comments = commentService.findAllByGeoPoint(geoPointUuid);
         commentHistoryService.create(comments);
         commentService.delete(geoPointUuid);
-        deleteById(geoPointUuid);
+        geoPointRepositoryService.deleteById(geoPointUuid);
       } else {
         log.error("Geo point with UUID {} not found for user {}.", geoPointUuid, userUuid);
       }
@@ -160,7 +164,7 @@ public class GeoPointService {
   }
 
   public Boolean isGeoPointBelongUser(UUID userUuid, UUID geoPointUuid) {
-    var geoPoint = findById(geoPointUuid);
+    var geoPoint = geoPointRepositoryService.findById(geoPointUuid);
     if (geoPoint.isPresent()) {
       return Objects.equals(geoPoint.get().getUserUuid(), userUuid);
     }
@@ -170,13 +174,13 @@ public class GeoPointService {
 
   public ResponseEntity<Integer> setGeoPointGrade(
       UUID userUuid, UUID geoPointUuid, GradeType gradeValue) {
-    var geoPoint = findById(geoPointUuid);
+    var geoPoint = geoPointRepositoryService.findById(geoPointUuid);
     if (geoPoint.isPresent()) {
       var point = geoPoint.get();
       if (!updateGradeLog(point, gradeValue))
         return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
       var newGrade = updateGrade(point.getGrade(), gradeValue);
-      updateGrade(geoPointUuid, newGrade);
+      geoPointRepositoryService.updateGrade(geoPointUuid, newGrade);
       return ResponseEntity.ok(newGrade);
     }
     log.error("Geo point with UUID {} not found for user {}.", geoPointUuid, userUuid);
@@ -211,7 +215,7 @@ public class GeoPointService {
   }
 
   public ResponseEntity<Integer> getGeoPointGrade(UUID geoPointUuid) {
-    var geoPoint = findById(geoPointUuid);
+    var geoPoint = geoPointRepositoryService.findById(geoPointUuid);
     if (geoPoint.isPresent()) {
       return ResponseEntity.ok(geoPoint.get().getGrade());
     }

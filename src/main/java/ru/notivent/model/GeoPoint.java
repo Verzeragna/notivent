@@ -1,5 +1,6 @@
 package ru.notivent.model;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ import ru.notivent.enums.GeoPointType;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GeoPoint {
+public class GeoPoint implements Serializable {
   UUID uuid;
   UUID userUuid;
   GeoPointType type;
